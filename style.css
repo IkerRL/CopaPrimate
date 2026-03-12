@@ -4,7 +4,6 @@ src:url('Berthold-Block.ttf');
 }
 
 :root{
-
 --omen-deep:#07081a;
 --omen-dark:#050612;
 
@@ -17,7 +16,6 @@ src:url('Berthold-Block.ttf');
 
 --card-bg:rgba(10,10,25,0.9);
 --card-border:rgba(120,120,255,0.18);
-
 }
 
 *{
@@ -27,526 +25,281 @@ box-sizing:border-box;
 }
 
 body{
-
 background:var(--omen-deep);
 color:white;
 overflow-x:hidden;
-
 font-family:'Inter',sans-serif;
-
 }
-
 
 /* NOISE */
-
 .noise-overlay{
-
 position:fixed;
 inset:0;
-
 pointer-events:none;
-
 background:url("https://grainy-gradients.vercel.app/noise.svg");
-
 opacity:.05;
-
 z-index:100;
-
 }
 
-
-
 /* HEADER */
-
 .main-header{
-
 position:relative;
-
 width:100%;
 height:28vh;
-
 display:flex;
 justify-content:center;
 align-items:center;
-
 background:linear-gradient(
 to bottom,
 rgba(10,10,35,0.95),
 rgba(10,10,35,0.8),
 transparent
 );
-
 backdrop-filter:blur(14px);
-
 border-bottom:1px solid rgba(120,120,255,0.15);
-
 z-index:90;
-
 }
 
 .header-content{
-
 text-align:center;
-
 }
 
-
 .titulo-principal{
-
 font-family:'BertholdBlock';
-
 font-size:clamp(3rem,8vw,6rem);
-
 text-shadow:
 0 8px 0 #1a1b4b,
 0 15px 25px rgba(0,0,0,0.6);
-
 animation:float 4s infinite alternate;
-
 }
-
 
 /* VOL ROW */
-
 .vol-row{
-
 display:flex;
-
 align-items:center;
 justify-content:center;
-
 gap:25px;
-
 margin-top:-10px;
-
 }
-
 
 .sticker-monkey{
-
 width:70px;
-
 filter:drop-shadow(0 0 10px rgba(255,255,255,.4));
-
 }
-
 
 .vol-text{
-
 font-family:'BertholdBlock';
-
 font-size:3.5rem;
-
 letter-spacing:10px;
-
 text-align:center;
-
 }
-
-
 
 /* CONTENT */
-
 .main-content{
-
-padding-top:40px;
-
+padding-top:28vh;
 position:relative;
-
 z-index:10;
-
 }
 
-
-/* GRID EQUIPOS (ACTUALIZADO) */
-
+/* GRID EQUIPOS */
 .grid-equipos{
-
 display:grid;
-
 grid-template-columns:repeat(4,1fr);
-
 gap:25px;
-
 padding:40px;
-
 width:100%;
-
 }
-
 
 /* RESPONSIVE */
-
-@media (max-width:1400px){
-
-.grid-equipos{
-grid-template-columns:repeat(4,1fr);
-}
-
-}
-
 @media (max-width:900px){
-
 .grid-equipos{
 grid-template-columns:repeat(2,1fr);
 }
-
 }
 
-
-
 /* CARD */
-
 .card-equipo{
-
 height:140px;
-
 background:var(--card-bg);
-
 border-radius:35px;
-
 border:2px solid var(--card-border);
-
 display:flex;
 align-items:center;
-
 padding:0 25px;
-
 position:relative;
-
 overflow:hidden;
-
 cursor:pointer;
-
 transition:.35s;
-
 }
 
 .card-equipo:hover{
-
 transform:translateY(-8px) scale(1.02);
-
 border-color:var(--omen-purple);
-
 box-shadow:0 0 30px var(--omen-glow);
-
 }
 
-
 /* REVEAL */
-
 .smoke-cover{
-
 position:absolute;
 inset:0;
-
 background:linear-gradient(
 135deg,
 #1a1b4b,
 var(--omen-dark)
 );
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 transition:.7s;
-
 }
 
 .smoke-cover::after{
-
 content:"REVELAR";
-
 letter-spacing:6px;
-
 color:var(--omen-purple);
-
 font-weight:900;
-
 font-size:.8rem;
-
 }
-
 
 .card-equipo.revealed .smoke-cover{
-
 opacity:0;
-
 transform:translateY(-100%) skewY(8deg);
-
 filter:blur(30px);
-
 pointer-events:none;
-
 }
 
-
-/* LOGO */
-
-.logo-frame{
-
-width:95px;
-height:95px;
-
-border:2px solid var(--omen-purple);
-
-border-radius:18px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-box-shadow:inset 0 0 15px var(--omen-glow);
-
+/* EQUIPO CONTENT - LOGO Y TEXTO */
+.equipo-content{
+display: flex;
+align-items: center;
+gap: 15px;
+height: 100%;
+opacity: 0;
+transition: opacity 0.6s ease, transform 0.6s ease;
 }
-
 
 .equipo-logo{
-
-width:70%;
-
-filter:brightness(1.5);
-
+height: 100%;
+width: auto;
+object-fit: contain;
+border-radius: 0;
+filter: brightness(1.2);
 }
-
-
 
 .equipo-data{
-
-margin-left:20px;
-
+display: flex;
+flex-direction: column;
+justify-content: center;
+transform: translateX(-20px);
+opacity: 0;
+transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
-
-.nombre-equipo{
-
-font-size:1.6rem;
-
-font-weight:800;
-
+.card-equipo.revealed .equipo-content{
+opacity: 1;
+transform: translateX(0);
+transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-
-.jugadores-row{
-
-display:flex;
-
-gap:15px;
-
-color:var(--omen-purple);
-
-font-size:.9rem;
-
-margin-top:4px;
-
+.card-equipo.revealed .equipo-data{
+transform: translateX(0);
+opacity: 1;
+transition-delay: 0.2s;
 }
-
-
 
 /* BOTON */
-
 .cierre{
-
 padding:80px;
-
 display:flex;
 justify-content:center;
-
 }
 
-
 .btn-valorant{
-
 background:#0f121c;
-
 border:1px solid var(--valorant-red);
-
 color:white;
-
 cursor:pointer;
-
 clip-path:polygon(
 10% 0,
 100% 0,
 90% 100%,
 0 100%
 );
-
 padding:2px;
-
 transition:.3s;
-
 }
-
 
 .btn-content{
-
 display:block;
-
 padding:18px 50px;
-
 border:1px solid rgba(255,70,85,.2);
-
 letter-spacing:2px;
-
 font-size:1.4rem;
-
 }
-
 
 .btn-valorant:hover{
-
 background:var(--valorant-red);
-
 box-shadow:0 0 40px rgba(255,70,85,.5);
-
 transform:scale(1.05);
-
 }
-
-
 
 /* BACKGROUND */
-
 .omen-bg{
-
 position:fixed;
-
 inset:0;
-
 z-index:-1;
-
 overflow:hidden;
-
 }
 
-
 .bg-energy-core{
-
 position:absolute;
-
 inset:-5%;
-
 background:
-
 radial-gradient(circle at center,
 rgba(120,110,255,.35) 0%,
 rgba(10,10,30,.7) 40%,
 rgba(5,5,20,1) 80%);
-
 filter:blur(2px);
-
 }
-
 
 .smoke-vortex-1,
 .smoke-vortex-2{
-
 position:absolute;
-
 width:150%;
 height:150%;
-
 top:-25%;
 left:-25%;
-
 opacity:.12;
-
 }
-
 
 .smoke-vortex-1{
-
 background:radial-gradient(circle,var(--omen-purple),transparent 60%);
-
 animation:smokeFloat1 35s infinite linear;
-
 }
-
 
 .smoke-vortex-2{
-
 background:radial-gradient(circle,var(--omen-cyan),transparent 50%);
-
 animation:smokeFloat2 25s infinite linear;
-
 }
 
-
-
 /* ANIMACIONES */
-
 @keyframes float{
-
 from{transform:translateY(0)}
 to{transform:translateY(-12px)}
-
 }
 
 @keyframes smokeFloat1{
-
 0%{transform:rotate(0deg)}
 100%{transform:rotate(360deg)}
-
 }
 
 @keyframes smokeFloat2{
-
 0%{transform:rotate(0deg)}
 100%{transform:rotate(-360deg)}
-
 }
-
-
 
 .vignette{
-
 position:absolute;
-
 inset:0;
-
 background:radial-gradient(circle,transparent 20%,var(--omen-deep) 95%);
-
-}
-/* Contenedor del contenido del equipo */
-.equipo-content{
-    display: flex;
-    align-items: center;
-    gap: 15px; /* espacio entre logo y datos */
-    height: 100%;
-    opacity: 0; /* oculto por defecto */
-}
-
-/* Logo sin recuadro, ocupa todo el alto de la tarjeta */
-.equipo-logo{
-    height: 100%; /* ocupa todo el alto de la tarjeta */
-    width: auto;  /* mantiene proporción */
-    object-fit: contain; /* se ajusta dentro del espacio */
-    border-radius: 0; /* elimina bordes */
-    filter: brightness(1.2);
-}
-
-/* Datos del equipo al lado del logo */
-.equipo-data{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    transform: translateX(-20px);
-    opacity: 0;
-    transition: transform 0.5s ease, opacity 0.5s ease;
-}
-
-/* Animación al revelar */
-.card-equipo.revealed .equipo-content{
-    opacity: 1;
-    transform: translateX(0);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.card-equipo.revealed .equipo-data{
-    transform: translateX(0);
-    opacity: 1;
-    transition-delay: 0.2s; /* texto aparece un poco después del logo */
 }
