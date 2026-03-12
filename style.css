@@ -31,19 +31,9 @@ overflow-x:hidden;
 font-family:'Inter',sans-serif;
 }
 
-/* NOISE */
-.noise-overlay{
-position:fixed;
-inset:0;
-pointer-events:none;
-background:url("https://grainy-gradients.vercel.app/noise.svg");
-opacity:.05;
-z-index:100;
-}
-
 /* HEADER */
+
 .main-header{
-position:relative;
 width:100%;
 height:28vh;
 display:flex;
@@ -55,62 +45,43 @@ rgba(10,10,35,0.95),
 rgba(10,10,35,0.8),
 transparent
 );
-backdrop-filter:blur(14px);
 border-bottom:1px solid rgba(120,120,255,0.15);
-z-index:90;
-}
-
-.header-content{
-text-align:center;
 }
 
 .titulo-principal{
 font-family:'BertholdBlock';
 font-size:clamp(3rem,8vw,6rem);
-text-shadow:
-0 8px 0 #1a1b4b,
-0 15px 25px rgba(0,0,0,0.6);
-animation:float 4s infinite alternate;
 }
 
-/* VOL ROW */
 .vol-row{
 display:flex;
 align-items:center;
 justify-content:center;
 gap:25px;
-margin-top:-10px;
 }
 
 .sticker-monkey{
 width:80px;
-filter:drop-shadow(0 0 10px rgba(255,255,255,.4));
 }
 
 .vol-text{
 font-family:'BertholdBlock';
 font-size:3.5rem;
-letter-spacing:10px;
-text-align:center;
 }
 
-/* CONTENT */
+/* GRID */
+
 .main-content{
 padding-top:28vh;
-position:relative;
-z-index:10;
 }
 
-/* GRID EQUIPOS */
 .grid-equipos{
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:25px;
 padding:40px;
-width:100%;
 }
 
-/* RESPONSIVE */
 @media (max-width:900px){
 .grid-equipos{
 grid-template-columns:repeat(2,1fr);
@@ -118,6 +89,7 @@ grid-template-columns:repeat(2,1fr);
 }
 
 /* CARD */
+
 .card-equipo{
 height:140px;
 background:var(--card-bg);
@@ -133,12 +105,13 @@ transition:.35s;
 }
 
 .card-equipo:hover{
-transform:translateY(-8px) scale(1.02);
+transform:translateY(-8px);
 border-color:var(--omen-purple);
 box-shadow:0 0 30px var(--omen-glow);
 }
 
-/* REVEAL */
+/* COVER */
+
 .smoke-cover{
 position:absolute;
 inset:0;
@@ -163,12 +136,10 @@ font-size:.8rem;
 
 .card-equipo.revealed .smoke-cover{
 opacity:0;
-transform:translateY(-100%) skewY(8deg);
-filter:blur(30px);
-pointer-events:none;
+transform:translateY(-100%);
 }
 
-/* EQUIPO CONTENT */
+/* CONTENT */
 
 .equipo-content{
 display:flex;
@@ -176,39 +147,31 @@ align-items:center;
 gap:18px;
 height:100%;
 opacity:0;
-transition:opacity .6s ease, transform .6s ease;
+transition:opacity .6s ease;
 }
 
-/* LOGO CONTROLADO */
+/* LOGO */
 
 .equipo-logo{
 width:90px;
 height:90px;
 object-fit:contain;
 flex-shrink:0;
-filter:brightness(1.2);
 }
 
-/* INFO EQUIPO */
+/* INFO */
 
 .equipo-data{
 display:flex;
 flex-direction:column;
 justify-content:center;
-transform:translateX(-20px);
-opacity:0;
-transition:transform .5s ease, opacity .5s ease;
 }
-
-/* NOMBRE EQUIPO */
 
 .nombre-equipo{
 font-weight:800;
 font-size:1.2rem;
 margin-bottom:6px;
 }
-
-/* JUGADORES */
 
 .jugadores-row{
 font-size:.9rem;
@@ -218,17 +181,8 @@ flex-direction:column;
 gap:2px;
 }
 
-/* ANIMACION REVEAL */
-
 .card-equipo.revealed .equipo-content{
 opacity:1;
-transform:translateX(0);
-}
-
-.card-equipo.revealed .equipo-data{
-transform:translateX(0);
-opacity:1;
-transition-delay:.2s;
 }
 
 /* BOTON */
@@ -244,89 +198,64 @@ background:#0f121c;
 border:1px solid var(--valorant-red);
 color:white;
 cursor:pointer;
-clip-path:polygon(
-10% 0,
-100% 0,
-90% 100%,
-0 100%
-);
 padding:2px;
-transition:.3s;
 }
 
 .btn-content{
 display:block;
 padding:18px 50px;
-border:1px solid rgba(255,70,85,.2);
-letter-spacing:2px;
 font-size:1.4rem;
 }
 
-.btn-valorant:hover{
-background:var(--valorant-red);
-box-shadow:0 0 40px rgba(255,70,85,.5);
-transform:scale(1.05);
-}
+/* MODAL */
 
-/* BACKGROUND */
-
-.omen-bg{
+.team-modal{
 position:fixed;
 inset:0;
-z-index:-1;
-overflow:hidden;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(12px);
+display:flex;
+align-items:center;
+justify-content:center;
+opacity:0;
+pointer-events:none;
+transition:.3s;
+z-index:200;
 }
 
-.bg-energy-core{
-position:absolute;
-inset:-5%;
-background:
-radial-gradient(circle at center,
-rgba(120,110,255,.35) 0%,
-rgba(10,10,30,.7) 40%,
-rgba(5,5,20,1) 80%);
-filter:blur(2px);
+.team-modal.active{
+opacity:1;
+pointer-events:auto;
 }
 
-.smoke-vortex-1,
-.smoke-vortex-2{
-position:absolute;
-width:150%;
-height:150%;
-top:-25%;
-left:-25%;
-opacity:.12;
+.team-modal-card{
+background:var(--card-bg);
+border:2px solid var(--omen-purple);
+border-radius:30px;
+padding:40px;
+display:flex;
+align-items:center;
+gap:35px;
+box-shadow:0 0 60px var(--omen-glow);
+transform:scale(.8);
+transition:.3s;
 }
 
-.smoke-vortex-1{
-background:radial-gradient(circle,var(--omen-purple),transparent 60%);
-animation:smokeFloat1 35s infinite linear;
+.team-modal.active .team-modal-card{
+transform:scale(1);
 }
 
-.smoke-vortex-2{
-background:radial-gradient(circle,var(--omen-cyan),transparent 50%);
-animation:smokeFloat2 25s infinite linear;
+.team-modal-card img{
+width:160px;
+height:160px;
+object-fit:contain;
 }
 
-/* ANIMACIONES */
-
-@keyframes float{
-from{transform:translateY(0)}
-to{transform:translateY(-12px)}
+.team-modal-nombre{
+font-size:2rem;
+font-weight:900;
 }
 
-@keyframes smokeFloat1{
-0%{transform:rotate(0deg)}
-100%{transform:rotate(360deg)}
-}
-
-@keyframes smokeFloat2{
-0%{transform:rotate(0deg)}
-100%{transform:rotate(-360deg)}
-}
-
-.vignette{
-position:absolute;
-inset:0;
-background:radial-gradient(circle,transparent 20%,var(--omen-deep) 95%);
+.team-modal-jugadores{
+margin-top:10px;
 }
