@@ -170,29 +170,42 @@ pointer-events:none;
 
 /* EQUIPO CONTENT - LOGO Y TEXTO */
 .equipo-content{
-display: flex;
-align-items: center;
-gap: 15px;
-height: 100%;
-opacity: 0;
-transition: opacity 0.6s ease, transform 0.6s ease;
+display:flex;
+align-items:center;
+gap:18px;
+height:100%;
+opacity:0;
+transition:opacity .6s ease, transform .6s ease;
 }
 
 .equipo-logo{
-height: 100%;
-width: auto;
-object-fit: contain;
-border-radius: 0;
-filter: brightness(1.2);
+width:90px;
+height:90px;
+object-fit:contain;
+flex-shrink:0;
 }
 
 .equipo-data{
-display: flex;
-flex-direction: column;
-justify-content: center;
-transform: translateX(-20px);
-opacity: 0;
-transition: transform 0.5s ease, opacity 0.5s ease;
+display:flex;
+flex-direction:column;
+justify-content:center;
+transform:translateX(-20px);
+opacity:0;
+transition:transform .5s ease, opacity .5s ease;
+}
+
+.nombre-equipo{
+font-weight:800;
+font-size:1.2rem;
+margin-bottom:6px;
+}
+
+.jugadores-row{
+font-size:.9rem;
+opacity:.85;
+display:flex;
+flex-direction:column;
+gap:2px;
 }
 
 .card-equipo.revealed .equipo-content{
