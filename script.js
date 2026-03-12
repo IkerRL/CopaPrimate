@@ -42,15 +42,21 @@ equipos.forEach((equipo, i) => {
         <img src="${equipo.logo}" class="equipo-logo">
       </div>
 
-      <div class="equipo-data">
-        <div class="nombre-equipo">${equipo.nombre}</div>
-        <div class="jugadores-row">
-          <span>👤 ${equipo.jugadores[0]}</span>
-          <span>👤 ${equipo.jugadores[1]}</span>
+card.innerHTML = `
+    <div class="smoke-cover"></div>
+
+    <div class="equipo-content">
+        <img src="${equipo.logo}" class="equipo-logo">
+
+        <div class="equipo-data">
+            <div class="nombre-equipo">${equipo.nombre}</div>
+            <div class="jugadores-row">
+                <span>👤 ${equipo.jugadores[0]}</span>
+                <span>👤 ${equipo.jugadores[1]}</span>
+            </div>
         </div>
-      </div>
     </div>
-  `
+`;
 
   const content = card.querySelector(".equipo-content")
   content.style.opacity = 0
