@@ -168,7 +168,8 @@ filter:blur(30px);
 pointer-events:none;
 }
 
-/* EQUIPO CONTENT - LOGO Y TEXTO */
+/* EQUIPO CONTENT */
+
 .equipo-content{
 display:flex;
 align-items:center;
@@ -178,12 +179,17 @@ opacity:0;
 transition:opacity .6s ease, transform .6s ease;
 }
 
+/* LOGO CONTROLADO */
+
 .equipo-logo{
 width:90px;
 height:90px;
 object-fit:contain;
 flex-shrink:0;
+filter:brightness(1.2);
 }
+
+/* INFO EQUIPO */
 
 .equipo-data{
 display:flex;
@@ -194,11 +200,15 @@ opacity:0;
 transition:transform .5s ease, opacity .5s ease;
 }
 
+/* NOMBRE EQUIPO */
+
 .nombre-equipo{
 font-weight:800;
 font-size:1.2rem;
 margin-bottom:6px;
 }
+
+/* JUGADORES */
 
 .jugadores-row{
 font-size:.9rem;
@@ -208,19 +218,21 @@ flex-direction:column;
 gap:2px;
 }
 
+/* ANIMACION REVEAL */
+
 .card-equipo.revealed .equipo-content{
-opacity: 1;
-transform: translateX(0);
-transition: opacity 0.6s ease, transform 0.6s ease;
+opacity:1;
+transform:translateX(0);
 }
 
 .card-equipo.revealed .equipo-data{
-transform: translateX(0);
-opacity: 1;
-transition-delay: 0.2s;
+transform:translateX(0);
+opacity:1;
+transition-delay:.2s;
 }
 
 /* BOTON */
+
 .cierre{
 padding:80px;
 display:flex;
@@ -257,6 +269,7 @@ transform:scale(1.05);
 }
 
 /* BACKGROUND */
+
 .omen-bg{
 position:fixed;
 inset:0;
@@ -296,6 +309,7 @@ animation:smokeFloat2 25s infinite linear;
 }
 
 /* ANIMACIONES */
+
 @keyframes float{
 from{transform:translateY(0)}
 to{transform:translateY(-12px)}
