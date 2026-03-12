@@ -1,6 +1,6 @@
+
 const container = document.getElementById("container-equipos")
 
-// Lista de 24 equipos con logos y jugadores
 const equipos = [
   { nombre: "Rose Devil", jugadores: ["Tony", "Jokker"], logo: "logo1.png" },
   { nombre: "Golden Sex", jugadores: ["Max", "Broken"], logo: "logo2.png" },
@@ -26,68 +26,84 @@ const equipos = [
   { nombre: "Mono León", jugadores: ["Leo", "King"], logo: "logo22.png" },
   { nombre: "Mono Capuchino", jugadores: ["Cap", "Chino"], logo: "logo23.png" },
   { nombre: "Mono Araña 2", jugadores: ["Spider", "Man"], logo: "logo24.png" }
-]
+  ]
 
-const fragment = document.createDocumentFragment()
+equipos.forEach(equipo=>{
 
-equipos.forEach(equipo => {
-  const card = document.createElement("div")
-  card.className = "card-equipo"
+const card=document.createElement("div")
+card.className="card-equipo"
 
-  card.innerHTML = `
-    <div class="smoke-cover"></div>
+card.innerHTML=`
 
-    <div class="equipo-content">
-        <img src="${equipo.logo}" class="equipo-logo">
+<div class="smoke-cover"></div>
 
-        <div class="equipo-data">
-            <div class="nombre-equipo">${equipo.nombre}</div>
-            <div class="jugadores-row">
-                <span>👤 ${equipo.jugadores[0]}</span>
-                <span>👤 ${equipo.jugadores[1]}</span>
-            </div>
-        </div>
-    </div>
-  `
+<div class="equipo-content">
 
-  const content = card.querySelector(".equipo-content")
-  content.style.opacity = 0
-  content.style.transform = "translateX(-20px)"
-  content.style.transition = "opacity 0.6s ease, transform 0.6s ease"
+<img src="${equipo.logo}" class="equipo-logo">
 
-  card.addEventListener("click", () => {
-    if(card.classList.contains("revealed")) return
-    card.classList.add("revealed")
-    content.style.opacity = 1
-    content.style.transform = "translateX(0)"
-  })
+<div class="equipo-data">
 
-  fragment.appendChild(card)
+<div class="nombre-equipo">${equipo.nombre}</div>
+
+<div class="jugadores-row">
+<span>👤 ${equipo.jugadores[0]}</span>
+<span>👤 ${equipo.jugadores[1]}</span>
+</div>
+
+</div>
+</div>
+`
+
+card.addEventListener("click",()=>{
+
+if(card.classList.contains("revealed")) return
+
+card.classList.add("revealed")
+
 })
 
-container.appendChild(fragment)
+container.appendChild(card)
 
-/* BOTON SORTEO */
-const boton = document.querySelector(".btn-valorant")
-boton.addEventListener("click", iniciarSorteo)
+})
 
-function iniciarSorteo() {
-  const cards = [...document.querySelectorAll(".card-equipo")]
-  shuffle(cards)
-  cards.forEach((card,i)=>{
-    setTimeout(()=>{
-      card.classList.add("revealed")
-      const content = card.querySelector(".equipo-content")
-      content.style.opacity = 1
-      content.style.transform = "translateX(0)"
-    }, i*250)
-  })
+/* MODAL */
+
+const modal=document.getElementById("teamModal")
+const modalCard=document.getElementById("teamModalCard")
+
+document.addEventListener("dblclick",(e)=>{
+
+const card=e.target.closest(".card-equipo")
+if(!card) return
+
+const logo=card.querySelector(".equipo-logo").src
+const nombre=card.querySelector(".nombre-equipo").textContent
+const jugadores=[...card.querySelectorAll(".jugadores-row span")].map(j=>j.textContent).join("<br>")
+
+modalCard.innerHTML=`
+
+<img src="${logo}">
+
+<div>
+
+<div class="team-modal-nombre">${nombre}</div>
+
+<div class="team-modal-jugadores">${jugadores}</div>
+
+</div>
+
+`
+
+modal.classList.add("active")
+
+})
+
+modal.addEventListener("click",(e)=>{
+
+if(e.target===modal){
+
+modal.classList.remove("active")
+
 }
 
-// Mezclar tarjetas
-function shuffle(array){
-  for(let i = array.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random()*(i+1))
-    [array[i],array[j]]=[array[j],array[i]]
-  }
-}
+})
