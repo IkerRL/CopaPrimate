@@ -1,6 +1,6 @@
 const container = document.getElementById("container-equipos")
 
-// Lista de 24 equipos
+// Lista de 24 equipos con logos y jugadores
 const equipos = [
   { nombre: "Rose Devil", jugadores: ["Tony", "Jokker"], logo: "logo1.png" },
   { nombre: "Golden Sex", jugadores: ["Max", "Broken"], logo: "logo2.png" },
@@ -30,19 +30,11 @@ const equipos = [
 
 const fragment = document.createDocumentFragment()
 
-equipos.forEach((equipo, i) => {
+equipos.forEach(equipo => {
   const card = document.createElement("div")
   card.className = "card-equipo"
 
   card.innerHTML = `
-    <div class="smoke-cover"></div>
-
-    <div class="equipo-content">
-      <div class="logo-frame">
-        <img src="${equipo.logo}" class="equipo-logo">
-      </div>
-
-card.innerHTML = `
     <div class="smoke-cover"></div>
 
     <div class="equipo-content">
@@ -56,7 +48,7 @@ card.innerHTML = `
             </div>
         </div>
     </div>
-`;
+  `
 
   const content = card.querySelector(".equipo-content")
   content.style.opacity = 0
