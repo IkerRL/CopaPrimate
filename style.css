@@ -36,7 +36,7 @@ body {
     align-items: center;
     background: linear-gradient(to bottom, rgba(10, 10, 35, 0.95), rgba(10, 10, 35, 0.8), transparent);
     border-bottom: 1px solid rgba(120, 120, 255, 0.15);
-    position: fixed; /* Asegura que se quede arriba */
+    position: fixed;
     top: 0;
     z-index: 100;
 }
@@ -64,7 +64,7 @@ body {
 
 /* GRID */
 .main-content {
-    padding-top: 32vh; /* Ajustado para que el header no tape las primeras cards */
+    padding-top: 32vh;
 }
 
 .grid-equipos {
@@ -88,7 +88,7 @@ body {
     align-items: center;
     padding: 0 25px;
     position: relative;
-    overflow: hidden; /* IMPORTANTE: Corta lo que sobresalga */
+    overflow: hidden;
     cursor: pointer;
     transition: .35s;
 }
@@ -99,32 +99,9 @@ body {
     box-shadow: 0 0 30px var(--omen-glow);
 }
 
-/* COVER (HUMO) */
+/* SMOKE COVER ELIMINADO PARA DOBLE CLIC */
 .smoke-cover {
-    position: absolute;
-    inset: 0;
-    background: #0a0a1a; /* Fondo sólido para que no se trasluzca el logo */
-    background-image: linear-gradient(135deg, #1a1b4b, var(--omen-dark));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: .7s;
-    pointer-events: none;
-    z-index: 10; /* NUEVO: Siempre por encima del logo al inicio */
-}
-
-.smoke-cover::after {
-    content: "REVELAR";
-    letter-spacing: 6px;
-    color: var(--omen-purple);
-    font-weight: 900;
-    font-size: .8rem;
-}
-
-.card-equipo.revealed .smoke-cover {
-    opacity: 0;
-    transform: translateY(-100%);
-    pointer-events: none;
+    display: none;
 }
 
 /* CONTENT */
@@ -134,34 +111,23 @@ body {
     gap: 18px;
     height: 100%;
     width: 100%;
-    opacity: 0;
-    transition: opacity .6s ease;
-    z-index: 5; /* Por debajo del humo */
+    opacity: 1;
 }
 
-.card-equipo.revealed .equipo-content {
-    opacity: 1;
-/* LOGO - Aquí está la magia para unificarlos */
+/* LOGO - SIN BORDE Y SIN FONDO */
 .equipo-logo {
-    width: 85px;             /* Tamaño fijo */
-    height: 85px;            /* Tamaño fijo */
-    object-fit: contain;     /* Para que no se estire */
+    width: 90px;           /* Tamaño fijo para que todos se alineen */
+    height: 90px;          /* Tamaño fijo para que todos se alineen */
+    object-fit: contain;   /* Mantiene la proporción sin estirar */
     flex-shrink: 0;
     
-    /* NUEVO: Esto crea el marco unificador */
-    background: rgba(255, 255, 255, 0.03); /* Un fondo casi negro muy sutil */
-    border: 1px solid rgba(124, 114, 255, 0.2); /* Borde púrpura muy fino */
-    border-radius: 12px;     /* Esquinas redondeadas suaves */
-    padding: 8px;            /* Este espacio hace que los logos no toquen el borde */
+    background: transparent; /* Quitamos el fondo */
+    border: none;           /* Quitamos el borde */
+    padding: 0;             /* Quitamos el padding */
+    box-shadow: none;       /* Quitamos la sombra */
     
-    box-shadow: inset 0 0 15px rgba(0,0,0,0.5); /* Sombra interna para dar profundidad */
-}
-
-/* Ajuste opcional para los logos que tienen fondo propio (como el de Golden Sex) */
-/* Esto asegura que si el logo tiene fondo, se vea bien dentro del marco */
-.equipo-logo {
     display: block;
-    image-rendering: -webkit-optimize-contrast; /* Mejora la nitidez */
+    image-rendering: -webkit-optimize-contrast;
 }
 
 /* INFO */
@@ -169,7 +135,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow: hidden; /* Evita que nombres largos rompan la card */
+    overflow: hidden;
 }
 
 .nombre-equipo {
@@ -218,7 +184,7 @@ body {
     font-weight: 900;
 }
 
-/* MODAL EQUIPO (Ajustado también) */
+/* MODAL */
 .team-modal {
     position: fixed;
     inset: 0;
@@ -252,14 +218,11 @@ body {
     max-width: 90%;
 }
 
-.team-modal.active .team-modal-card {
-    transform: scale(1);
-}
-
 .team-modal-card img {
-    width: 140px;          /* AJUSTADO */
-    height: 140px;         /* AJUSTADO */
-    object-fit: contain;   /* NUEVO */
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border: none; /* Quitamos borde también en el modal */
 }
 
 .team-modal-nombre {
