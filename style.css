@@ -140,15 +140,27 @@ body {
 
 .card-equipo.revealed .equipo-content {
     opacity: 1;
+/* LOGO - Aquí está la magia para unificarlos */
+.equipo-logo {
+    width: 85px;             /* Tamaño fijo */
+    height: 85px;            /* Tamaño fijo */
+    object-fit: contain;     /* Para que no se estire */
+    flex-shrink: 0;
+    
+    /* NUEVO: Esto crea el marco unificador */
+    background: rgba(255, 255, 255, 0.03); /* Un fondo casi negro muy sutil */
+    border: 1px solid rgba(124, 114, 255, 0.2); /* Borde púrpura muy fino */
+    border-radius: 12px;     /* Esquinas redondeadas suaves */
+    padding: 8px;            /* Este espacio hace que los logos no toquen el borde */
+    
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.5); /* Sombra interna para dar profundidad */
 }
 
-/* LOGO - AQUÍ ESTÁ EL CAMBIO PRINCIPAL */
+/* Ajuste opcional para los logos que tienen fondo propio (como el de Golden Sex) */
+/* Esto asegura que si el logo tiene fondo, se vea bien dentro del marco */
 .equipo-logo {
-    width: 80px;           /* AJUSTADO: Tamaño fijo de la "caja" visual */
-    height: 80px;          /* AJUSTADO: Tamaño fijo de la "caja" visual */
-    object-fit: contain;   /* NUEVO: Mantiene la proporción sin estirarse */
-    flex-shrink: 0;        /* NUEVO: Evita que el logo se aplaste */
-    filter: drop-shadow(0 0 8px rgba(0,0,0,0.5));
+    display: block;
+    image-rendering: -webkit-optimize-contrast; /* Mejora la nitidez */
 }
 
 /* INFO */
