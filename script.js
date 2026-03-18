@@ -16,11 +16,11 @@ const equipos = [
 
   { nombre: "MakacoNinjaPelocho", jugadores: ["Iker", "Adri"], logo: "logo6.png" },
 
-  { nombre: "Baboon", jugadores: ["Babu", "Tito"], logo: "logo7.png" },
+  { nombre: "Bloody Fruit", jugadores: ["MrPain 神", "Sandiass21"], logo: "logo7.png" },
 
-  { nombre: "Mono Araña", jugadores: ["Ara", "Spidey"], logo: "logo8.png" },
+  { nombre: "Hijas del Kaos", jugadores: ["Satha", "Kaos"], logo: "logo8.png" },
 
-  { nombre: "Capuchinos", jugadores: ["Capu", "Nino"], logo: "logo9.png" },
+  { nombre: "Konoha Makaca", jugadores: ["MakaQuillo", "MakaIsla"], logo: "logo9.png" },
 
   { nombre: "Saimiris", jugadores: ["Sai", "Miri"], logo: "logo10.png" },
 
