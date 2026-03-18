@@ -91,11 +91,17 @@ body {
     overflow: hidden;
     cursor: pointer;
     transition: .35s;
-    /* Aseguramos que la card reciba los clics */
-    pointer-events: auto; 
+    /* IMPORTANTE: La card es la que recibe los eventos */
+    pointer-events: auto;
 }
 
-/* COVER (HUMO) - VUELVE A ESTAR ACTIVO */
+.card-equipo:hover {
+    transform: translateY(-8px);
+    border-color: var(--omen-purple);
+    box-shadow: 0 0 30px var(--omen-glow);
+}
+
+/* COVER (HUMO) - VUELVE A ESTAR AQUÍ */
 .smoke-cover {
     position: absolute;
     inset: 0;
@@ -106,7 +112,7 @@ body {
     justify-content: center;
     transition: .7s;
     z-index: 10;
-    /* ESTA LÍNEA ES EL TRUCO: el clic pasa a través del humo y le da a la card */
+    /* CLAVE: El humo es "invisible" para los clics, pasan a la card */
     pointer-events: none; 
 }
 
@@ -118,30 +124,10 @@ body {
     font-size: .8rem;
 }
 
-/* Cuando se revela, el humo sube */
+/* Cuando se añade la clase .revealed vía JS */
 .card-equipo.revealed .smoke-cover {
     opacity: 0;
     transform: translateY(-100%);
-}
-
-/* CONTENT - Oculto por defecto hasta que se revela */
-.equipo-content {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    height: 100%;
-    width: 100%;
-    opacity: 0; /* Empieza invisible */
-    transition: opacity .6s ease;
-}
-
-.card-equipo.revealed .equipo-content {
-    opacity: 1; /* Se hace visible al revelar */
-}
-
-/* SMOKE COVER ELIMINADO PARA DOBLE CLIC */
-.smoke-cover {
-    display: none;
 }
 
 /* CONTENT */
@@ -151,23 +137,24 @@ body {
     gap: 18px;
     height: 100%;
     width: 100%;
+    opacity: 0; /* Oculto hasta que se revela */
+    transition: opacity .6s ease;
+}
+
+.card-equipo.revealed .equipo-content {
     opacity: 1;
 }
 
-/* LOGO - SIN BORDE Y SIN FONDO */
+/* LOGO - LIMPIO Y SIN BORDES */
 .equipo-logo {
-    width: 90px;           /* Tamaño fijo para que todos se alineen */
-    height: 90px;          /* Tamaño fijo para que todos se alineen */
-    object-fit: contain;   /* Mantiene la proporción sin estirar */
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
     flex-shrink: 0;
-    
-    background: transparent; /* Quitamos el fondo */
-    border: none;           /* Quitamos el borde */
-    padding: 0;             /* Quitamos el padding */
-    box-shadow: none;       /* Quitamos la sombra */
-    
+    background: transparent;
+    border: none;
+    padding: 0;
     display: block;
-    image-rendering: -webkit-optimize-contrast;
 }
 
 /* INFO */
@@ -182,17 +169,11 @@ body {
     font-weight: 800;
     font-size: 1.1rem;
     margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .jugadores-row {
     font-size: .85rem;
     opacity: .85;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
 }
 
 /* BOTON SORTEO */
@@ -207,13 +188,7 @@ body {
     border: 1px solid var(--valorant-red);
     color: white;
     cursor: pointer;
-    padding: 2px;
     transition: .3s;
-}
-
-.btn-valorant:hover {
-    background: var(--valorant-red);
-    box-shadow: 0 0 20px rgba(255, 70, 85, 0.4);
 }
 
 .btn-content {
@@ -236,7 +211,7 @@ body {
     opacity: 0;
     pointer-events: none;
     transition: .3s;
-    z-index: 9999;
+    z-index: 9999; /* Por encima de todo */
 }
 
 .team-modal.active {
@@ -253,26 +228,16 @@ body {
     align-items: center;
     gap: 35px;
     box-shadow: 0 0 60px var(--omen-glow);
-    transform: scale(.8);
-    transition: .3s;
-    max-width: 90%;
 }
 
 .team-modal-card img {
     width: 150px;
     height: 150px;
     object-fit: contain;
-    border: none; /* Quitamos borde también en el modal */
 }
 
 .team-modal-nombre {
     font-size: 2.2rem;
     font-weight: 900;
     color: var(--omen-cyan);
-}
-
-.team-modal-jugadores {
-    margin-top: 15px;
-    font-size: 1.2rem;
-    line-height: 1.6;
 }
