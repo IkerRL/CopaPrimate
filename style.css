@@ -109,6 +109,7 @@ body {
     align-items: center;
     justify-content: center;
     transition: .7s;
+    pointer-events: none;
     z-index: 10; /* NUEVO: Siempre por encima del logo al inicio */
 }
 
