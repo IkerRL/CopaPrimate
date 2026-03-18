@@ -1,4 +1,3 @@
-
 const container = document.getElementById("container-equipos")
 
 const equipos = [
@@ -26,84 +25,64 @@ const equipos = [
   { nombre: "Mono León", jugadores: ["Leo", "King"], logo: "logo22.png" },
   { nombre: "Mono Capuchino", jugadores: ["Cap", "Chino"], logo: "logo23.png" },
   { nombre: "Mono Araña 2", jugadores: ["Spider", "Man"], logo: "logo24.png" }
-  ]
+]
 
-equipos.forEach(equipo=>{
+// Generar las cartas
+equipos.forEach(equipo => {
+  const card = document.createElement("div")
+  card.className = "card-equipo"
 
-const card=document.createElement("div")
-card.className="card-equipo"
+  card.innerHTML = `
+    <div class="smoke-cover"></div>
+    <div class="equipo-content">
+      <img src="${equipo.logo}" class="equipo-logo">
+      <div class="equipo-data">
+        <div class="nombre-equipo">${equipo.nombre}</div>
+        <div class="jugadores-row">
+          <span>👤 ${equipo.jugadores[0]}</span>
+          <span>👤 ${equipo.jugadores[1]}</span>
+        </div>
+      </div>
+    </div>
+  `
 
-card.innerHTML=`
+  // Evento Clic Simple: Revelar
+  card.addEventListener("click", () => {
+    card.classList.add("revealed")
+  })
 
-<div class="smoke-cover"></div>
-
-<div class="equipo-content">
-
-<img src="${equipo.logo}" class="equipo-logo">
-
-<div class="equipo-data">
-
-<div class="nombre-equipo">${equipo.nombre}</div>
-
-<div class="jugadores-row">
-<span>👤 ${equipo.jugadores[0]}</span>
-<span>👤 ${equipo.jugadores[1]}</span>
-</div>
-
-</div>
-</div>
-`
-
-card.addEventListener("click",()=>{
-
-if(card.classList.contains("revealed")) return
-
-card.classList.add("revealed")
-
+  container.appendChild(card)
 })
 
-container.appendChild(card)
+/* MODAL CORREGIDO */
+const modal = document.getElementById("teamModal")
+const modalCard = document.getElementById("teamModalCard")
 
+document.addEventListener("dblclick", (e) => {
+  const card = e.target.closest(".card-equipo")
+  if (!card) return
+
+  // Al hacer doble clic, también revelamos la carta por si acaso estaba tapada
+  card.classList.add("revealed")
+
+  const logo = card.querySelector(".equipo-logo").src
+  const nombre = card.querySelector(".nombre-equipo").textContent
+  const jugadores = [...card.querySelectorAll(".jugadores-row span")].map(j => j.textContent).join("<br>")
+
+  modalCard.innerHTML = `
+    <img src="${logo}" style="width:150px; height:150px; object-fit:contain;">
+    <div>
+      <div class="team-modal-nombre">${nombre}</div>
+      <div class="team-modal-jugadores">${jugadores}</div>
+    </div>
+  `
+
+  modal.classList.add("active")
 })
 
-/* MODAL */
-
-const modal=document.getElementById("teamModal")
-const modalCard=document.getElementById("teamModalCard")
-
-document.addEventListener("dblclick",(e)=>{
-
-const card=e.target.closest(".card-equipo")
-if(!card) return
-
-const logo=card.querySelector(".equipo-logo").src
-const nombre=card.querySelector(".nombre-equipo").textContent
-const jugadores=[...card.querySelectorAll(".jugadores-row span")].map(j=>j.textContent).join("<br>")
-
-modalCard.innerHTML=`
-
-<img src="${logo}">
-
-<div>
-
-<div class="team-modal-nombre">${nombre}</div>
-
-<div class="team-modal-jugadores">${jugadores}</div>
-
-</div>
-
-`
-
-modal.classList.add("active")
-
-})
-
-modal.addEventListener("click",(e)=>{
-
-if(e.target===modal){
-
-modal.classList.remove("active")
-
-}
-
+// Cerrar modal
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    modal.classList.remove("active")
+  }
 })
