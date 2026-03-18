@@ -91,12 +91,52 @@ body {
     overflow: hidden;
     cursor: pointer;
     transition: .35s;
+    /* Aseguramos que la card reciba los clics */
+    pointer-events: auto; 
 }
 
-.card-equipo:hover {
-    transform: translateY(-8px);
-    border-color: var(--omen-purple);
-    box-shadow: 0 0 30px var(--omen-glow);
+/* COVER (HUMO) - VUELVE A ESTAR ACTIVO */
+.smoke-cover {
+    position: absolute;
+    inset: 0;
+    background: #0a0a1a; 
+    background-image: linear-gradient(135deg, #1a1b4b, var(--omen-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .7s;
+    z-index: 10;
+    /* ESTA LÍNEA ES EL TRUCO: el clic pasa a través del humo y le da a la card */
+    pointer-events: none; 
+}
+
+.smoke-cover::after {
+    content: "REVELAR";
+    letter-spacing: 6px;
+    color: var(--omen-purple);
+    font-weight: 900;
+    font-size: .8rem;
+}
+
+/* Cuando se revela, el humo sube */
+.card-equipo.revealed .smoke-cover {
+    opacity: 0;
+    transform: translateY(-100%);
+}
+
+/* CONTENT - Oculto por defecto hasta que se revela */
+.equipo-content {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    height: 100%;
+    width: 100%;
+    opacity: 0; /* Empieza invisible */
+    transition: opacity .6s ease;
+}
+
+.card-equipo.revealed .equipo-content {
+    opacity: 1; /* Se hace visible al revelar */
 }
 
 /* SMOKE COVER ELIMINADO PARA DOBLE CLIC */
