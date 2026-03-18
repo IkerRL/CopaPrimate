@@ -230,7 +230,7 @@ body {
     opacity: 0;
     pointer-events: none;
     transition: .3s;
-    z-index: 200;
+    z-index: 9999;
 }
 
 .team-modal.active {
