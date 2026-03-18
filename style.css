@@ -153,8 +153,8 @@ transition:opacity .6s ease;
 /* LOGO */
 
 .equipo-logo{
-width:90px;
-height:90px;
+width:1100px;
+height:1100px;
 object-fit:contain;
 flex-shrink:0;
 }
