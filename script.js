@@ -36,22 +36,6 @@ const equipos = [
 
   { nombre: "Uakaris", jugadores: ["Uaka", "Riki"], logo: "logo16.png" },
 
-  { nombre: "Muriquis", jugadores: ["Muri", "Qui"], logo: "logo17.png" },
-
-  { nombre: "Howlers", jugadores: ["Howl", "Er"], logo: "logo18.png" },
-
-  { nombre: "Langures", jugadores: ["Lan", "Gure"], logo: "logo19.png" },
-
-  { nombre: "Probóscidos", jugadores: ["Probo", "Scido"], logo: "logo20.png" },
-
-  { nombre: "Monos Dorados", jugadores: ["Dorado", "Sol"], logo: "logo21.png" },
-
-  { nombre: "Mono León", jugadores: ["Leo", "King"], logo: "logo22.png" },
-
-  { nombre: "Mono Capuchino", jugadores: ["Cap", "Chino"], logo: "logo23.png" },
-
-  { nombre: "Mono Araña 2", jugadores: ["Spider", "Man"], logo: "logo24.png" }
-
   ]
 
 
