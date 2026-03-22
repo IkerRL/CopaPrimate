@@ -31,83 +31,91 @@ overflow-x:hidden;
 font-family:'Inter',sans-serif;
 }
 
-/* 🔥 FONDO PRO */
+/* 🔥 FONDO ESTILO VALORANT GÓTICO */
 
 .omen-bg{
 position:fixed;
 inset:0;
 z-index:-2;
 background:
-radial-gradient(circle at 50% 40%, rgba(124,114,255,0.15), transparent 60%),
-radial-gradient(circle at 80% 20%, rgba(95,208,255,0.08), transparent 60%),
-linear-gradient(to bottom, #050612, #07081a);
+radial-gradient(circle at 50% 50%, rgba(90,80,255,0.25), transparent 55%),
+radial-gradient(circle at 50% 50%, rgba(20,20,80,0.9), #050612 80%);
+overflow:hidden;
 }
 
 .bg-energy-core{
 position:absolute;
-top:40%;
+top:50%;
 left:50%;
-width:500px;
-height:500px;
+width:700px;
+height:700px;
 transform:translate(-50%,-50%);
-background:radial-gradient(circle, var(--omen-purple), transparent 70%);
-filter:blur(120px);
-opacity:.35;
-animation:pulse 6s ease-in-out infinite;
+background:radial-gradient(circle, rgba(140,120,255,0.4), transparent 70%);
+filter:blur(140px);
+animation:pulse 5s ease-in-out infinite;
 }
 
 @keyframes pulse{
-0%,100%{ transform:translate(-50%,-50%) scale(1); opacity:.3; }
-50%{ transform:translate(-50%,-50%) scale(1.2); opacity:.5; }
+0%,100%{ transform:translate(-50%,-50%) scale(1); opacity:.4; }
+50%{ transform:translate(-50%,-50%) scale(1.15); opacity:.6; }
 }
 
-.smoke-vortex-1,
-.smoke-vortex-2{
+/* FORMAS LATERALES */
+
+.omen-bg::before,
+.omen-bg::after{
+content:"";
 position:absolute;
-width:1200px;
-height:1200px;
-border-radius:50%;
-filter:blur(80px);
-opacity:.15;
+width:500px;
+height:500px;
+background:#1a1a4a;
+filter:blur(60px);
+opacity:.6;
+z-index:-1;
 }
 
-.smoke-vortex-1{
-top:-20%;
-left:-10%;
-background:radial-gradient(circle, var(--omen-purple), transparent 70%);
-animation:rotateSmoke 40s linear infinite;
+.omen-bg::before{
+top:-120px;
+left:-120px;
+border-radius:60% 40% 30% 70%;
 }
 
-.smoke-vortex-2{
-bottom:-30%;
-right:-10%;
-background:radial-gradient(circle, var(--omen-cyan), transparent 70%);
-animation:rotateSmokeReverse 60s linear infinite;
+.omen-bg::after{
+bottom:-120px;
+right:-120px;
+border-radius:40% 60% 70% 30%;
 }
 
-@keyframes rotateSmoke{
-from{ transform:rotate(0deg); }
-to{ transform:rotate(360deg); }
+/* EFECTO LOGO */
+
+.logo-glow{
+position:absolute;
+top:50%;
+left:50%;
+width:400px;
+height:200px;
+transform:translate(-50%,-50%) rotate(-10deg);
+background:linear-gradient(120deg, transparent 30%, rgba(140,120,255,0.5), transparent 70%);
+filter:blur(30px);
+opacity:.5;
 }
 
-@keyframes rotateSmokeReverse{
-from{ transform:rotate(360deg); }
-to{ transform:rotate(0deg); }
-}
+/* VIÑETA */
 
 .vignette{
 position:absolute;
 inset:0;
-background:radial-gradient(circle, transparent 60%, rgba(0,0,0,0.6));
-z-index:2;
+background:radial-gradient(circle, transparent 60%, rgba(0,0,0,0.7));
 }
+
+/* GRANO */
 
 .noise-overlay{
 position:fixed;
 inset:0;
 z-index:3;
 pointer-events:none;
-opacity:.05;
+opacity:.04;
 background-image:url("https://grainy-gradients.vercel.app/noise.svg");
 }
 
