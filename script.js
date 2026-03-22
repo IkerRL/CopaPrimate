@@ -22,13 +22,13 @@ const equipos = [
 
   { nombre: "Konoha Makaca", jugadores: ["MakaQuillo", "MakaIsla"], logo: "logo9.png" },
 
-  { nombre: "Saimiris", jugadores: ["Sai", "Miri"], logo: "logo10.png" },
+  { nombre: "Team Obrikat", jugadores: ["JettDiffs", "EGOFack"], logo: "logo10.png" },
 
-  { nombre: "Macacos", jugadores: ["Mac", "Roco"], logo: "logo11.png" },
+  { nombre: "TETONES: Equipo Nacional de Somalia", jugadores: ["Marrkitosss", "Davv"], logo: "logo11.png" },
 
-  { nombre: "Colobos", jugadores: ["Colo", "Bobo"], logo: "logo12.png" },
+  { nombre: "GOATS", jugadores: ["Mica", "Marco"], logo: "logo12.png" },
 
-  { nombre: "Gibones", jugadores: ["Gib", "Bim"], logo: "logo13.png" },
+  { nombre: "SPIDYBOOBS", jugadores: ["Sama", "Potro"], logo: "logo13.png" },
 
   { nombre: "Tarsiers", jugadores: ["Tar", "Si"], logo: "logo14.png" },
 
