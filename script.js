@@ -35,7 +35,6 @@ const equipos = [
   { nombre: "Sakis", jugadores: ["Sak", "Ki"], logo: "logo15.png" },
 
   { nombre: "Uakaris", jugadores: ["Uaka", "Riki"], logo: "logo16.png" },
-
   ]
 
 
