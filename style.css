@@ -1,305 +1,349 @@
-@font-face {
-    font-family: 'BertholdBlock';
-    src: url('Berthold-Block.ttf');
+@font-face{
+font-family:'BertholdBlock';
+src:url('Berthold-Block.ttf');
 }
 
-:root {
-    --omen-deep: #07081a;
-    --omen-dark: #050612;
-    --omen-purple: #7c72ff;
-    --omen-cyan: #5fd0ff;
-    --omen-glow: rgba(124, 114, 255, 0.55);
-    --valorant-red: #ff4655;
-    --card-bg: rgba(10, 10, 25, 0.9);
-    --card-border: rgba(120, 120, 255, 0.18);
+:root{
+--omen-deep:#07081a;
+--omen-dark:#050612;
+
+--omen-purple:#7c72ff;
+--omen-cyan:#5fd0ff;
+
+--omen-glow:rgba(124,114,255,0.55);
+
+--valorant-red:#ff4655;
+
+--card-bg:rgba(10,10,25,0.9);
+--card-border:rgba(120,120,255,0.18);
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
-body {
-    background: var(--omen-deep);
-    color: white;
-    overflow-x: hidden;
-    font-family: 'Inter', sans-serif;
+body{
+background:var(--omen-deep);
+color:white;
+overflow-x:hidden;
+font-family:'Inter',sans-serif;
 }
 
-/* --- FONDO Y EFECTOS --- */
-.omen-bg {
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    background: radial-gradient(circle at 50% 50%, rgba(90,80,255,0.25), transparent 55%),
-                radial-gradient(circle at 50% 50%, rgba(20,20,80,0.9), #050612 80%);
+/* 🔥 FONDO ESTILO VALORANT GÓTICO */
+
+.omen-bg{
+position:fixed;
+inset:0;
+z-index:-2;
+background:
+radial-gradient(circle at 50% 50%, rgba(90,80,255,0.25), transparent 55%),
+radial-gradient(circle at 50% 50%, rgba(20,20,80,0.9), #050612 80%);
+overflow:hidden;
 }
 
-.bg-energy-core {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 700px;
-    height: 700px;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(140,120,255,0.4), transparent 70%);
-    filter: blur(140px);
-    animation: pulse 5s ease-in-out infinite;
+.bg-energy-core{
+position:absolute;
+top:50%;
+left:50%;
+width:700px;
+height:700px;
+transform:translate(-50%,-50%);
+background:radial-gradient(circle, rgba(140,120,255,0.4), transparent 70%);
+filter:blur(140px);
+animation:pulse 5s ease-in-out infinite;
 }
 
-@keyframes pulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: .4; }
-    50% { transform: translate(-50%, -50%) scale(1.15); opacity: .6; }
+@keyframes pulse{
+0%,100%{ transform:translate(-50%,-50%) scale(1); opacity:.4; }
+50%{ transform:translate(-50%,-50%) scale(1.15); opacity:.6; }
 }
 
-.noise-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 3;
-    pointer-events: none;
-    opacity: .04;
-    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+/* FORMAS LATERALES */
+
+.omen-bg::before,
+.omen-bg::after{
+content:"";
+position:absolute;
+width:500px;
+height:500px;
+background:#1a1a4a;
+filter:blur(60px);
+opacity:.6;
+z-index:-1;
 }
 
-/* --- HEADER CORREGIDO (MONITOS A LOS LADOS) --- */
-.main-header {
-    width: 100%;
-    min-height: 25vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(to bottom, rgba(10,10,35,0.95), transparent);
-    border-bottom: 1px solid rgba(120,120,255,0.15);
-    padding: 20px;
+.omen-bg::before{
+top:-120px;
+left:-120px;
+border-radius:60% 40% 30% 70%;
 }
 
-.header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Esto empuja los elementos a los extremos */
-    width: 100%;
-    max-width: 1200px;
-    gap: 30px;
+.omen-bg::after{
+bottom:-120px;
+right:-120px;
+border-radius:40% 60% 70% 30%;
 }
 
-.vol-badge {
-    display: flex;
-    flex-direction: column; /* Monito arriba, texto abajo */
-    align-items: center;
-    gap: 8px;
-    min-width: 120px;
+/* EFECTO LOGO */
+
+.logo-glow{
+position:absolute;
+top:50%;
+left:50%;
+width:400px;
+height:200px;
+transform:translate(-50%,-50%) rotate(-10deg);
+background:linear-gradient(120deg, transparent 30%, rgba(140,120,255,0.5), transparent 70%);
+filter:blur(30px);
+opacity:.5;
 }
 
-.titulo-principal {
-    font-family: 'BertholdBlock';
-    font-size: clamp(2.5rem, 6vw, 5.5rem);
-    text-align: center;
-    flex: 1;
-    margin: 0;
+/* VIÑETA */
+
+.vignette{
+position:absolute;
+inset:0;
+background:radial-gradient(circle, transparent 60%, rgba(0,0,0,0.7));
 }
 
-.vol-text {
-    font-family: 'BertholdBlock';
-    font-size: 1.2rem;
-    color: var(--omen-cyan);
-    letter-spacing: 2px;
-    text-shadow: 0 0 10px var(--omen-glow);
+/* GRANO */
+
+.noise-overlay{
+position:fixed;
+inset:0;
+z-index:3;
+pointer-events:none;
+opacity:.04;
+background-image:url("https://grainy-gradients.vercel.app/noise.svg");
 }
 
-.sticker-monkey {
-    width: 80px;
-    height: auto;
-    filter: drop-shadow(0 0 15px var(--omen-glow));
+/* HEADER */
+
+.main-header{
+width:100%;
+height:28vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(
+to bottom,
+rgba(10,10,35,0.95),
+rgba(10,10,35,0.8),
+transparent
+);
+border-bottom:1px solid rgba(120,120,255,0.15);
 }
 
-/* --- GRID --- */
-.grid-equipos {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px;
-    padding: 40px;
+.titulo-principal{
+font-family:'BertholdBlock';
+font-size:clamp(3rem,8vw,6rem);
 }
 
-@media (max-width: 900px) {
-    .grid-equipos { grid-template-columns: repeat(2, 1fr); }
-    .header-container { gap: 15px; }
-    .sticker-monkey { width: 60px; }
+.vol-row{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:25px;
 }
 
-/* --- CARD --- */
-.card-equipo {
-    height: 140px;
-    background: var(--card-bg);
-    border-radius: 35px;
-    border: 2px solid var(--card-border);
-    display: flex;
-    align-items: center;
-    padding: 0 25px;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    transition: .35s;
+.sticker-monkey{
+width:80px;
 }
 
-.card-equipo:hover {
-    transform: translateY(-8px);
-    border-color: var(--omen-purple);
-    box-shadow: 0 0 30px var(--omen-glow);
+.vol-text{
+font-family:'BertholdBlock';
+font-size:3.5rem;
 }
 
-.smoke-cover {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, #1a1b4b, var(--omen-dark));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: .7s;
-    z-index: 5;
+/* GRID */
+
+.main-content{
+padding-top:40px;
 }
 
-.smoke-cover::after {
-    content: "REVELAR";
-    letter-spacing: 6px;
-    color: var(--omen-purple);
-    font-weight: 900;
-    font-size: .8rem;
+.grid-equipos{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+padding:40px;
 }
 
-.card-equipo.revealed .smoke-cover {
-    display: none; 
+@media (max-width:900px){
+.grid-equipos{
+grid-template-columns:repeat(2,1fr);
+}
 }
 
-.equipo-content {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    transition: opacity .6s ease;
+/* CARD */
+
+.card-equipo{
+height:140px;
+background:var(--card-bg);
+border-radius:35px;
+border:2px solid var(--card-border);
+display:flex;
+align-items:center;
+padding:0 25px;
+position:relative;
+overflow:hidden;
+cursor:pointer;
+transition:.35s;
 }
 
-.card-equipo.revealed .equipo-content {
-    opacity: 1;
+.card-equipo:hover{
+transform:translateY(-8px);
+border-color:var(--omen-purple);
+box-shadow:0 0 30px var(--omen-glow);
 }
 
-.equipo-logo {
-    width: 65px;
-    height: 65px;
-    object-fit: contain;
+/* COVER */
+
+.smoke-cover{
+position:absolute;
+inset:0;
+background:linear-gradient(
+135deg,
+#1a1b4b,
+var(--omen-dark)
+);
+display:flex;
+align-items:center;
+justify-content:center;
+transition:.7s;
 }
 
-/* --- JUGADORES EN COLUMNA --- */
-.jugadores-column {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    font-size: 0.85rem;
-    opacity: 0.8;
+.smoke-cover::after{
+content:"REVELAR";
+letter-spacing:6px;
+color:var(--omen-purple);
+font-weight:900;
+font-size:.8rem;
 }
 
-.nombre-equipo {
-    font-weight: 800;
-    font-size: 1.1rem;
-    margin-bottom: 4px;
+.card-equipo.revealed .smoke-cover{
+opacity:0;
+transform:translateY(-100%);
 }
 
-/* --- MODAL --- */
-.team-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.7);
-    backdrop-filter: blur(12px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: .3s;
-    z-index: 200;
+/* CONTENT */
+
+.equipo-content{
+display:flex;
+align-items:center;
+gap:18px;
+height:100%;
+opacity:0;
+transition:opacity .6s ease;
 }
 
-.team-modal.active {
-    opacity: 1;
-    pointer-events: auto;
+/* LOGO */
+
+.equipo-logo{
+width:90px;
+height:90px;
+object-fit:contain;
+flex-shrink:0;
 }
 
-.team-modal-card {
-    background: var(--card-bg);
-    border: 2px solid var(--omen-purple);
-    border-radius: 30px;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 0 60px var(--omen-glow);
+/* INFO */
+
+.equipo-data{
+display:flex;
+flex-direction:column;
+justify-content:center;
 }
 
-/* --- FASE DE GRUPOS --- */
-.contenedor-grupo {
-    background: rgba(10, 10, 25, 0.4);
-    border: 1px solid var(--card-border);
-    border-radius: 35px;
-    padding: 25px;
-    margin-bottom: 30px;
+.nombre-equipo{
+font-weight:800;
+font-size:1.1rem;
+margin-bottom:6px;
 }
 
-.titulo-grupo-header {
-    font-family: 'BertholdBlock';
-    color: var(--omen-cyan);
-    font-size: 2.2rem;
-    text-align: center;
-    margin-bottom: 20px;
+.jugadores-row{
+font-size:.9rem;
+opacity:.85;
+display:flex;
+flex-direction:column;
+gap:2px;
 }
 
-.pelotitas-container {
-    display: flex;
-    gap: 6px;
-    margin-left: auto;
+.card-equipo.revealed .equipo-content{
+opacity:1;
 }
 
-.pelotita {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #1a1a2e;
-    border: 1px solid rgba(255,255,255,0.1);
+/* BOTON */
+
+.cierre{
+padding:80px;
+display:flex;
+justify-content:center;
 }
 
-.pelotita[data-estado="1"] { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
-.pelotita[data-estado="2"] { background: var(--valorant-red); box-shadow: 0 0 10px var(--valorant-red); }
-
-.card-equipo.eliminado {
-    opacity: 0.3;
-    filter: grayscale(1);
+.btn-valorant{
+background:#0f121c;
+border:1px solid var(--valorant-red);
+color:white;
+cursor:pointer;
+padding:2px;
 }
 
-/* --- BOTONES --- */
-.cierre {
-    padding: 40px;
-    display: flex;
-    justify-content: center;
+.btn-content{
+display:block;
+padding:18px 50px;
+font-size:1.4rem;
 }
 
-.btn-valorant {
-    background: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    transition: 0.3s;
+/* MODAL */
+
+.team-modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(12px);
+display:flex;
+align-items:center;
+justify-content:center;
+opacity:0;
+pointer-events:none;
+transition:.3s;
+z-index:200;
 }
 
-.btn-content {
-    display: block;
-    background: var(--valorant-red);
-    padding: 15px 45px;
-    color: white;
-    font-weight: 900;
-    font-size: 1.2rem;
-    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+.team-modal.active{
+opacity:1;
+pointer-events:auto;
+}
+
+.team-modal-card{
+background:var(--card-bg);
+border:2px solid var(--omen-purple);
+border-radius:30px;
+padding:40px;
+display:flex;
+align-items:center;
+gap:35px;
+box-shadow:0 0 60px var(--omen-glow);
+transform:scale(.8);
+transition:.3s;
+}
+
+.team-modal.active .team-modal-card{
+transform:scale(1);
+}
+
+.team-modal-card img{
+width:160px;
+height:160px;
+object-fit:contain;
+}
+
+.team-modal-nombre{
+font-size:2rem;
+font-weight:900;
+}
+
+.team-modal-jugadores{
+margin-top:10px;
 }
