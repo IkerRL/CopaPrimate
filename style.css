@@ -281,18 +281,34 @@ display:flex;
 justify-content:center;
 }
 
-.btn-valorant{
-background:#0f121c;
-border: none;
-color:white;
-cursor:pointer;
-padding:0;
+.btn-valorant {
+    background: transparent;
+    border: none;       /* <--- Esto elimina la línea roja fina de la imagen */
+    padding: 0;          /* <--- Esto quita el espacio entre la línea y el fondo */
+    cursor: pointer;
+    transition: 0.3s;
+    outline: none;       /* Evita que aparezca un cuadro al hacer click */
+    display: inline-block;
 }
 
-.btn-content{
-display:block;
-padding:18px 50px;
-font-size:1.4rem;
+/* El contenido interno se encarga de la forma y el tamaño */
+.btn-content {
+    display: block;
+    background: var(--valorant-red);
+    padding: 15px 45px;
+    color: white;
+    font-weight: 900;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    /* Esta es la forma inclinada */
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    transition: 0.3s;
+}
+
+/* Efecto hover opcional para que se sienta vivo */
+.btn-valorant:hover .btn-content {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
 }
 
 /* MODAL */
