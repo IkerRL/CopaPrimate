@@ -283,10 +283,10 @@ justify-content:center;
 
 .btn-valorant{
 background:#0f121c;
-border:1px solid var(--valorant-red);
+border: none;
 color:white;
 cursor:pointer;
-padding:2px;
+padding:0;
 }
 
 .btn-content{
