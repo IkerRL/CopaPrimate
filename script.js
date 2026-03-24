@@ -21,7 +21,7 @@ const equipos = [
 
 const memoriaResultados = { "A": [], "B": [], "C": [], "D": [] };
 
-// RENDER INICIAL
+// Renderizado inicial (Tu código original)
 equipos.forEach(equipo=>{
     const card=document.createElement("div")
     card.className="card-equipo"
@@ -31,11 +31,12 @@ equipos.forEach(equipo=>{
             <img src="${equipo.logo}" class="equipo-logo">
             <div class="equipo-data">
                 <div class="nombre-equipo">${equipo.nombre}</div>
-                <div class="jugadores-row" style="font-size: 0.8rem; color: #888;">
-                    <span>👤 ${equipo.jugadores[0]}</span> | <span>👤 ${equipo.jugadores[1]}</span>
+                <div class="jugadores-row">
+                    <span>👤 ${equipo.jugadores[0]}</span>
+                    <span>👤 ${equipo.jugadores[1]}</span>
                 </div>
             </div>
-            <div class="pelotitas-container" style="display:none; margin-top:10px">
+            <div class="pelotitas-container" style="display:none;">
                 <div class="pelotita" data-estado="0"></div>
                 <div class="pelotita" data-estado="0"></div>
                 <div class="pelotita" data-estado="0"></div>
@@ -52,20 +53,20 @@ equipos.forEach(equipo=>{
 const modal=document.getElementById("teamModal")
 const modalCard=document.getElementById("teamModalCard")
 
+// DblClick original (solo antes del sorteo)
 document.addEventListener("dblclick",(e)=>{
     const card=e.target.closest(".card-equipo")
     if(!card || document.body.classList.contains('sorteo-realizado')) return
-    
     const logo=card.querySelector(".equipo-logo").src
     const nombre=card.querySelector(".nombre-equipo").textContent
     const jugadores=[...card.querySelectorAll(".jugadores-row span")].map(j=>j.textContent).join("<br>")
-    modalCard.innerHTML=`<div style="text-align:center"><img src="${logo}" style="width:100px"><div class="team-modal-nombre" style="font-family:'BertholdBlock'; font-size:2rem; margin:15px 0">${nombre}</div><div style="color:var(--omen-cyan)">${jugadores}</div></div>`
+    modalCard.innerHTML=`<img src="${logo}"><div><div class="team-modal-nombre">${nombre}</div><div class="team-modal-jugadores">${jugadores}</div></div>`
     modal.classList.add("active")
 })
 
 modal.addEventListener("click",(e)=>{ if(e.target===modal) modal.classList.remove("active") })
 
-// LÓGICA SORTEO
+// LÓGICA DEL SORTEO
 const btnSorteo = document.querySelector('.btn-valorant');
 btnSorteo.addEventListener('click', () => {
     document.body.classList.add('sorteo-realizado');
@@ -75,8 +76,7 @@ btnSorteo.addEventListener('click', () => {
     container.innerHTML = ''; 
     const letras = ["A", "B", "C", "D"];
 
-    for (let i = 0; i < 4; i++) {
-        const letra = letras[i];
+    letras.forEach((letra, i) => {
         const grupoWrapper = document.createElement('div');
         grupoWrapper.className = 'contenedor-grupo';
         grupoWrapper.innerHTML = `<h2 class="titulo-grupo-header">GRUPO ${letra}</h2><div class="lista-interna"></div>`;
@@ -92,9 +92,10 @@ btnSorteo.addEventListener('click', () => {
             const nombre = card.querySelector('.nombre-equipo').textContent;
             const logo = card.querySelector('.equipo-logo').src;
             
+            // Layout limpio: Sin jugadores ni puntos de texto
             card.innerHTML = `
-                <div class="equipo-content" style="opacity:1; width:100%; display:flex; align-items:center; gap:15px">
-                    <img src="${logo}" class="equipo-logo" style="width:35px; height:35px">
+                <div class="equipo-content" style="opacity:1; width:100%; display:flex; align-items:center;">
+                    <img src="${logo}" class="equipo-logo" style="width:40px; height:40px; margin-right:15px">
                     <div class="nombre-equipo" style="font-size:0.9rem; flex:1">${nombre}</div>
                     <div class="pelotitas-container">
                         <div class="pelotita" data-estado="0"></div>
@@ -109,7 +110,7 @@ btnSorteo.addEventListener('click', () => {
         titulo.onclick = () => abrirGestionPartidos(letra, cardsGrupo, listaInterna);
         container.appendChild(grupoWrapper);
         actualizarPuntosYOrden(listaInterna);
-    }
+    });
     btnSorteo.style.display = 'none';
 });
 
@@ -119,45 +120,40 @@ function abrirGestionPartidos(letra, cardsGrupo, listaInterna) {
     const resG = memoriaResultados[letra];
 
     modalCard.innerHTML = `
-        <h2 style="font-family:'BertholdBlock'; color:var(--omen-cyan); text-align:center; margin-bottom:20px">RESULTADOS GRUPO ${letra}</h2>
+        <h2 class="team-modal-nombre" style="color:var(--omen-cyan); text-align:center; margin-bottom:15px">PARTIDOS GRUPO ${letra}</h2>
         <div id="contenedor-partidos">
             ${cruces.map((par, i) => `
-                <div class="fila-partido" style="display:flex; align-items:center; margin:10px 0; background:rgba(255,255,255,0.05); padding:10px; border-radius:10px">
-                    <span style="flex:1; text-align:right; font-size:0.8rem">${nombres[par[0]]}</span>
-                    <div style="display:flex; gap:5px; margin:0 10px">
-                        <input type="number" class="in-l" value="${resG[i].sL}" style="width:35px; background:#000; color:#fff; border:1px solid var(--omen-purple); text-align:center">
-                        <input type="number" class="in-v" value="${resG[i].sV}" style="width:35px; background:#000; color:#fff; border:1px solid var(--omen-purple); text-align:center">
+                <div class="fila-partido">
+                    <span style="flex:1; text-align:right; font-size:0.85rem">${nombres[par[0]]}</span>
+                    <div style="display:flex; gap:8px; margin:0 15px">
+                        <input type="number" class="marcador-input in-l" value="${resG[i].sL}" placeholder="0">
+                        <input type="number" class="marcador-input in-v" value="${resG[i].sV}" placeholder="0">
                     </div>
-                    <span style="flex:1; font-size:0.8rem">${nombres[par[1]]}</span>
+                    <span style="flex:1; font-size:0.85rem">${nombres[par[1]]}</span>
                 </div>
             `).join('')}
         </div>
-        <button class="btn-valorant" id="save-close" style="width:100%; margin-top:20px"><span class="btn-content" style="padding:10px">GUARDAR</span></button>
+        <button class="btn-valorant" id="close-modal" style="width:100%; margin-top:15px"><span class="btn-content">GUARDAR</span></button>
     `;
 
-    const inputs = modal.querySelectorAll('input');
-    inputs.forEach(input => {
+    modal.querySelectorAll('input').forEach(input => {
         input.oninput = () => {
-            const filas = Array.from(modal.querySelectorAll('.fila-partido'));
-            filas.forEach((fila, idx) => {
-                memoriaResultados[letra][idx] = {
-                    sL: fila.querySelector('.in-l').value,
-                    sV: fila.querySelector('.in-v').value
-                };
+            const filas = modal.querySelectorAll('.fila-partido');
+            filas.forEach((f, idx) => {
+                memoriaResultados[letra][idx] = { sL: f.querySelector('.in-l').value, sV: f.querySelector('.in-v').value };
             });
             procesarResultadosGrupo(letra, cardsGrupo, listaInterna);
         };
     });
 
     modal.classList.add("active");
-    document.getElementById('save-close').onclick = () => modal.classList.remove("active");
+    document.getElementById('close-modal').onclick = () => modal.classList.remove("active");
 }
 
 function procesarResultadosGrupo(letra, cardsGrupo, listaInterna) {
     const cruces = [[0, 1], [2, 3], [0, 2], [1, 3], [0, 3], [1, 2]];
     const resultados = memoriaResultados[letra];
     const conteo = Array(4).fill(0);
-
     cardsGrupo.forEach(c => c.querySelectorAll('.pelotita').forEach(p => p.dataset.estado = "0"));
 
     cruces.forEach((par, i) => {
