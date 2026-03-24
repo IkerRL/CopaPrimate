@@ -14,7 +14,7 @@ const equipos = [
 
   { nombre: "Crimson Eclipsed", jugadores: ["ReyFhantom", "zNyrex "], logo: "logo5.png" },
 
-  { nombre: "MakacoNinjaPelocho", jugadores: ["Iker", "Adri"], logo: "logo6.png" },
+  { nombre: "Makaco NinjaPelocho", jugadores: ["Iker", "Adri"], logo: "logo6.png" },
 
   { nombre: "Bloody Fruit", jugadores: ["MrPain 神", "Sandiass21"], logo: "logo7.png" },
 
