@@ -301,3 +301,39 @@ body {
     opacity: 0.3;
     filter: grayscale(1);
 }
+/* --- ARREGLO VOL. I Y HEADER --- */
+.vol-row {
+    display: flex;
+    flex-direction: column; /* Alinea el sticker y el texto en vertical si es necesario */
+    align-items: center;
+    gap: 10px;
+}
+
+.vol-text {
+    font-family: 'BertholdBlock';
+    font-size: 2rem; /* Ajusta el tamaño para que no rompa el diseño */
+    color: rgba(255, 255, 255, 0.7); /* Un poco más sutil */
+    letter-spacing: 2px;
+}
+
+/* --- ARREGLO JUGADORES AMONTONADOS --- */
+.jugadores-column {
+    display: flex;
+    flex-direction: column; /* Asegura que el segundo jugador vaya DEBAJO del primero */
+    gap: 4px;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.jugador {
+    white-space: nowrap; /* Evita que el nombre se corte de forma rara */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Si el nombre es muy largo, pone "..." */
+}
+
+/* Ajuste extra para el logo del header si se ve mal */
+.sticker-monkey {
+    width: 60px;
+    height: auto;
+    filter: drop-shadow(0 0 10px var(--omen-glow));
+}
