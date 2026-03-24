@@ -30,7 +30,7 @@ const equipos = [
 
   { nombre: "SPIDYBOOBS", jugadores: ["Sama", "Potro"], logo: "logo13.png" },
 
-  { nombre: "Tarsiers", jugadores: ["Tar", "Si"], logo: "logo14.png" },
+  { nombre: "MUGIWARAS", jugadores: ["Andreloregon", "Jess"], logo: "logo14.png" },
 
   { nombre: "Sakis", jugadores: ["Sak", "Ki"], logo: "logo15.png" },
 
