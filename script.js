@@ -33,17 +33,13 @@ equipos.forEach(equipo => {
             <img src="${equipo.logo}" class="equipo-logo">
             <div class="equipo-data">
                 <div class="nombre-equipo">${equipo.nombre}</div>
-                <div class="jugadores-row">
-                    <span>👤 ${equipo.jugadores[0]}</span>
-                    <span>👤 ${equipo.jugadores[1]}</span>
+                <div class="jugadores-column"> <div class="jugador">👤 ${equipo.jugadores[0]}</div>
+                    <div class="jugador">👤 ${equipo.jugadores[1]}</div>
                 </div>
             </div>
         </div>
     `;
-    card.addEventListener("click", () => {
-        if (card.classList.contains("revealed")) return;
-        card.classList.add("revealed");
-    });
+    // ... resto del código del listener
     container.appendChild(card);
 });
 
