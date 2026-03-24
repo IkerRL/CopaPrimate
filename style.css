@@ -62,20 +62,55 @@ body {
     background-image: url("https://grainy-gradients.vercel.app/noise.svg");
 }
 
-/* --- HEADER --- */
+/* --- HEADER CORREGIDO (MONITOS A LOS LADOS) --- */
 .main-header {
     width: 100%;
-    height: 28vh;
+    min-height: 25vh;
     display: flex;
     justify-content: center;
     align-items: center;
     background: linear-gradient(to bottom, rgba(10,10,35,0.95), transparent);
     border-bottom: 1px solid rgba(120,120,255,0.15);
+    padding: 20px;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Esto empuja los elementos a los extremos */
+    width: 100%;
+    max-width: 1200px;
+    gap: 30px;
+}
+
+.vol-badge {
+    display: flex;
+    flex-direction: column; /* Monito arriba, texto abajo */
+    align-items: center;
+    gap: 8px;
+    min-width: 120px;
 }
 
 .titulo-principal {
     font-family: 'BertholdBlock';
-    font-size: clamp(3rem, 8vw, 6rem);
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    text-align: center;
+    flex: 1;
+    margin: 0;
+}
+
+.vol-text {
+    font-family: 'BertholdBlock';
+    font-size: 1.2rem;
+    color: var(--omen-cyan);
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--omen-glow);
+}
+
+.sticker-monkey {
+    width: 80px;
+    height: auto;
+    filter: drop-shadow(0 0 15px var(--omen-glow));
 }
 
 /* --- GRID --- */
@@ -88,9 +123,11 @@ body {
 
 @media (max-width: 900px) {
     .grid-equipos { grid-template-columns: repeat(2, 1fr); }
+    .header-container { gap: 15px; }
+    .sticker-monkey { width: 60px; }
 }
 
-/* --- CARD ORIGINAL --- */
+/* --- CARD --- */
 .card-equipo {
     height: 140px;
     background: var(--card-bg);
@@ -130,7 +167,6 @@ body {
     font-size: .8rem;
 }
 
-/* IMPORTANTE: Cuando se revela en grupos, ocultamos el cover por completo */
 .card-equipo.revealed .smoke-cover {
     display: none; 
 }
@@ -150,50 +186,27 @@ body {
 }
 
 .equipo-logo {
-    width: 80px;
-    height: 80px;
+    width: 65px;
+    height: 65px;
     object-fit: contain;
+}
+
+/* --- JUGADORES EN COLUMNA --- */
+.jugadores-column {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.85rem;
+    opacity: 0.8;
 }
 
 .nombre-equipo {
     font-weight: 800;
     font-size: 1.1rem;
+    margin-bottom: 4px;
 }
 
-/* --- BOTONES VALORANT (SIN RECUADROS) --- */
-.cierre {
-    padding: 60px;
-    display: flex;
-    justify-content: center; /* Centrado horizontal */
-    width: 100%;
-}
-
-.btn-valorant {
-    background: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    transition: 0.3s;
-    outline: none;
-}
-
-.btn-content {
-    display: block;
-    background: var(--valorant-red);
-    padding: 15px 45px;
-    color: white;
-    font-weight: 900;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
-}
-
-.btn-valorant:hover .btn-content {
-    filter: brightness(1.2);
-    transform: translateY(-2px);
-}
-
-/* --- MODAL (VERTICALIZADO) --- */
+/* --- MODAL --- */
 .team-modal {
     position: fixed;
     inset: 0;
@@ -219,48 +232,12 @@ body {
     border-radius: 30px;
     padding: 40px;
     display: flex;
-    flex-direction: column; /* VERTICAL */
+    flex-direction: column;
     align-items: center;
     gap: 20px;
     width: 90%;
     max-width: 500px;
     box-shadow: 0 0 60px var(--omen-glow);
-}
-
-.team-modal-nombre {
-    font-size: 2rem;
-    font-weight: 900;
-    color: var(--omen-cyan);
-    font-family: 'BertholdBlock';
-    text-align: center;
-}
-
-#contenedor-partidos {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.fila-partido {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px;
-    background: rgba(255,255,255,0.03);
-    border-radius: 12px;
-    border: 1px solid rgba(124, 114, 255, 0.1);
-}
-
-.marcador-input {
-    width: 40px;
-    height: 35px;
-    background: #000;
-    border: 1px solid var(--omen-purple);
-    color: white;
-    text-align: center;
-    font-family: 'BertholdBlock';
-    font-size: 1.1rem;
 }
 
 /* --- FASE DE GRUPOS --- */
@@ -287,8 +264,8 @@ body {
 }
 
 .pelotita {
-    width: 15px;
-    height: 15px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: #1a1a2e;
     border: 1px solid rgba(255,255,255,0.1);
@@ -301,39 +278,28 @@ body {
     opacity: 0.3;
     filter: grayscale(1);
 }
-/* --- ARREGLO VOL. I Y HEADER --- */
-.vol-row {
+
+/* --- BOTONES --- */
+.cierre {
+    padding: 40px;
     display: flex;
-    flex-direction: column; /* Alinea el sticker y el texto en vertical si es necesario */
-    align-items: center;
-    gap: 10px;
+    justify-content: center;
 }
 
-.vol-text {
-    font-family: 'BertholdBlock';
-    font-size: 2rem; /* Ajusta el tamaño para que no rompa el diseño */
-    color: rgba(255, 255, 255, 0.7); /* Un poco más sutil */
-    letter-spacing: 2px;
+.btn-valorant {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-/* --- ARREGLO JUGADORES AMONTONADOS --- */
-.jugadores-column {
-    display: flex;
-    flex-direction: column; /* Asegura que el segundo jugador vaya DEBAJO del primero */
-    gap: 4px;
-    font-size: 0.85rem;
-    opacity: 0.8;
-}
-
-.jugador {
-    white-space: nowrap; /* Evita que el nombre se corte de forma rara */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Si el nombre es muy largo, pone "..." */
-}
-
-/* Ajuste extra para el logo del header si se ve mal */
-.sticker-monkey {
-    width: 60px;
-    height: auto;
-    filter: drop-shadow(0 0 10px var(--omen-glow));
+.btn-content {
+    display: block;
+    background: var(--valorant-red);
+    padding: 15px 45px;
+    color: white;
+    font-weight: 900;
+    font-size: 1.2rem;
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
 }
