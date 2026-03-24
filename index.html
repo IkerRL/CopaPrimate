@@ -1,61 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Copa Primate</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copa Primate - Vol. I</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="noise-overlay"></div>
 
 <div class="omen-bg">
-<div class="bg-energy-core"></div>
-<div class="logo-glow"></div>
-<div class="smoke-vortex-1"></div>
-<div class="smoke-vortex-2"></div>
-<div class="vignette"></div>
+    <div class="bg-energy-core"></div>
+    <div class="logo-glow"></div>
+    <div class="vignette"></div>
 </div>
 
-<header class="main-header fixed-header">
-
-<div class="header-content">
-
-<h1 class="titulo-principal">COPA PRIMATE</h1>
-
-<div class="vol-row">
-<img src="monito-der.png" class="sticker-monkey">
-<h2 class="vol-text">VOL. I</h2>
-<img src="monito-izq.png" class="sticker-monkey">
-</div>
-
-</div>
-
+<header class="main-header">
+    <div class="header-content">
+        <h1 class="titulo-principal">COPA PRIMATE</h1>
+        <div class="vol-row">
+            <img src="monito-der.png" class="sticker-monkey">
+            <h2 class="vol-text">VOL. I</h2>
+            <img src="monito-izq.png" class="sticker-monkey">
+        </div>
+    </div>
 </header>
 
 <main class="main-content">
-
-<section class="grid-equipos" id="container-equipos"></section>
-
-<footer class="cierre">
-
-<button class="btn-valorant">
-<span class="btn-content">INICIAR SORTEO</span>
-</button>
-
-</footer>
-
+    <section class="grid-equipos" id="container-equipos"></section>
+    
+    <footer class="footer-controls">
+        <button class="btn-valorant">
+            <span class="btn-content">INICIAR SORTEO</span>
+        </button>
+    </footer>
 </main>
 
-<!-- MODAL EQUIPO -->
 <div class="team-modal" id="teamModal">
-<div class="team-modal-card" id="teamModalCard"></div>
+    <div class="team-modal-card" id="teamModalCard"></div>
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
