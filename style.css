@@ -5,6 +5,7 @@
 
 :root {
     --omen-deep: #07081a;
+    --omen-dark: #050612;
     --omen-purple: #7c72ff;
     --omen-cyan: #5fd0ff;
     --omen-glow: rgba(124, 114, 255, 0.55);
@@ -20,96 +21,148 @@ body {
     color: white;
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
+/* --- FONDO --- */
 .omen-bg {
     position: fixed; inset: 0; z-index: -2;
-    background: radial-gradient(circle at 50% 50%, rgba(90,80,255,0.15), transparent 60%), #050612;
+    background: radial-gradient(circle at 50% 50%, rgba(90,80,255,0.25), transparent 55%),
+                radial-gradient(circle at 50% 50%, rgba(20,20,80,0.9), #050612 80%);
 }
 
 .bg-energy-core {
     position: absolute; top: 50%; left: 50%;
-    width: 800px; height: 800px; transform: translate(-50%, -50%);
-    background: radial-gradient(circle, var(--omen-purple), transparent 70%);
-    filter: blur(150px); opacity: 0.2; animation: pulse 8s infinite alternate;
+    width: 700px; height: 700px; transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(140,120,255,0.4), transparent 70%);
+    filter: blur(140px); animation: pulse 5s ease-in-out infinite;
 }
 
 @keyframes pulse {
-    from { transform: translate(-50%, -50%) scale(1); opacity: 0.2; }
-    to { transform: translate(-50%, -50%) scale(1.2); opacity: 0.3; }
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: .4; }
+    50% { transform: translate(-50%, -50%) scale(1.15); opacity: .6; }
 }
 
-.noise-overlay { position: fixed; inset: 0; z-index: 3; pointer-events: none; opacity: 0.05; background-image: url("https://grainy-gradients.vercel.app/noise.svg"); }
+.noise-overlay {
+    position: fixed; inset: 0; z-index: 3; pointer-events: none; opacity: .04;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+}
 
-.main-header { padding: 60px 20px; text-align: center; position: relative; z-index: 5; }
-.titulo-principal { font-family: 'BertholdBlock'; font-size: clamp(3.5rem, 10vw, 7rem); letter-spacing: 6px; text-shadow: 0 0 30px var(--omen-glow); }
-.vol-row { display: flex; align-items: center; justify-content: center; gap: 30px; }
-.sticker-monkey { width: 70px; filter: drop-shadow(0 0 15px var(--omen-cyan)); }
-.vol-text { font-family: 'BertholdBlock'; font-size: 3.5rem; color: var(--omen-purple); }
+/* --- HEADER --- */
+.main-header {
+    width: 100%; height: 25vh; display: flex; justify-content: center; align-items: center;
+    background: linear-gradient(to bottom, rgba(10,10,35,0.95), rgba(10,10,35,0.8), transparent);
+    border-bottom: 1px solid rgba(120,120,255,0.15);
+}
 
+.titulo-principal { font-family: 'BertholdBlock'; font-size: clamp(2.5rem, 6vw, 5rem); text-shadow: 0 0 30px var(--omen-glow); }
+.vol-row { display: flex; align-items: center; justify-content: center; gap: 20px; }
+.sticker-monkey { width: 60px; filter: drop-shadow(0 0 15px var(--omen-cyan)); }
+.vol-text { font-family: 'BertholdBlock'; font-size: 2.5rem; color: var(--omen-purple); }
+
+/* --- CONTENEDOR PRINCIPAL --- */
 .grid-equipos {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px;
-    padding: 0 50px 50px 50px; max-width: 1700px; margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px 40px;
+    max-width: 1800px;
+    margin: 0 auto;
 }
 
+/* ESTADO: CUANDO HAY GRUPOS (Todos en una fila) */
+.grid-equipos.fase-grupos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Esto fuerza A, B, C, D en línea */
+    align-items: start;
+}
+
+/* --- CARDS --- */
 .card-equipo {
-    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
-    padding: 20px; position: relative; cursor: pointer; transition: 0.4s; overflow: hidden;
-    display: flex; align-items: center; gap: 15px; min-height: 110px;
+    width: calc(25% - 20px);
+    min-width: 280px;
+    height: 120px;
+    background: var(--card-bg);
+    border-radius: 25px;
+    border: 2px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: .3s;
 }
 
-.card-equipo:hover { transform: translateY(-5px); border-color: var(--omen-purple); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.card-equipo:hover { transform: translateY(-5px); border-color: var(--omen-purple); }
 
 .smoke-cover {
-    position: absolute; inset: 0; background: linear-gradient(45deg, #0a0a1a, #1a1a3a);
-    z-index: 10; display: flex; align-items: center; justify-content: center;
-    transition: 0.8s; font-family: 'BertholdBlock'; font-size: 1.5rem; color: var(--omen-purple);
+    position: absolute; inset: 0; z-index: 10;
+    background: linear-gradient(135deg, #1a1b4b, var(--omen-dark));
+    display: flex; align-items: center; justify-content: center; transition: .6s;
 }
 
-.card-equipo.revealed .smoke-cover { transform: translateY(-100%); }
+.smoke-cover::after { content: "REVELAR"; letter-spacing: 4px; color: var(--omen-purple); font-weight: 900; font-size: .7rem; }
+.card-equipo.revealed .smoke-cover { opacity: 0; transform: translateY(-100%); }
+
+.equipo-content { display: flex; align-items: center; gap: 15px; width: 100%; opacity: 0; transition: opacity .5s; }
+.card-equipo.revealed .equipo-content { opacity: 1; }
+
 .equipo-logo { width: 60px; height: 60px; object-fit: contain; flex-shrink: 0; }
-.nombre-equipo { font-family: 'BertholdBlock'; font-size: 1.3rem; color: #fff; margin-bottom: 5px; }
-.jugadores-row { font-size: 0.85rem; color: #aaa; }
+.nombre-equipo { font-family: 'BertholdBlock'; font-size: 1rem; color: #fff; margin-bottom: 2px; }
+.jugadores-row { font-size: .75rem; color: #aaa; display: flex; flex-direction: column; }
 
-.footer-controls { display: flex; justify-content: center; padding: 60px; }
-.btn-valorant { background: transparent; border: none; padding: 0; cursor: pointer; transition: 0.3s; }
-.btn-valorant:hover { transform: scale(1.05); filter: brightness(1.2); }
+/* --- BOTÓN --- */
+.footer-controls { display: flex; justify-content: center; padding: 40px; }
+.btn-valorant { background: transparent; border: none; cursor: pointer; }
 .btn-content {
-    display: block; background: var(--valorant-red); padding: 20px 70px;
-    color: white; font-weight: 900; font-size: 1.2rem; letter-spacing: 2px;
-    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    display: block; background: var(--valorant-red); padding: 15px 50px; color: white;
+    font-weight: 900; font-size: 1.2rem; letter-spacing: 2px;
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); transition: 0.3s;
 }
 
-#save-close .btn-content { background: var(--omen-purple); padding: 15px 40px; }
-
-.contenedor-grupo { background: rgba(15, 15, 35, 0.4); border-radius: 35px; padding: 30px; margin-bottom: 25px; border: 1px solid rgba(124, 114, 255, 0.1); }
-.titulo-grupo-header { font-family: 'BertholdBlock'; color: var(--omen-cyan); font-size: 2.2rem; text-align: center; margin-bottom: 20px; cursor: pointer; }
-.lista-interna { display: flex; flex-direction: column; gap: 12px; }
-
-.pelotitas-container { display: flex; gap: 8px; }
-.pelotita { width: 16px; height: 16px; border-radius: 50%; background: #111; }
-.pelotita[data-estado="1"] { background: #00ff88; box-shadow: 0 0 12px #00ff88; }
-.pelotita[data-estado="2"] { background: var(--valorant-red); box-shadow: 0 0 12px var(--valorant-red); }
-
-.card-equipo.eliminado { opacity: 0.3; filter: grayscale(1); }
-
-/* MODAL MEJORADO */
-.team-modal {
-    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px);
-    display: none; align-items: center; justify-content: center; z-index: 1000;
+/* --- CONTENEDORES DE GRUPO --- */
+.contenedor-grupo { 
+    background: rgba(10, 10, 30, 0.7); 
+    border-radius: 25px; 
+    padding: 20px; 
+    border: 1px solid rgba(124, 114, 255, 0.15);
+    width: 100%; /* Se adapta al grid de 4 columnas */
 }
+.titulo-grupo-header { font-family: 'BertholdBlock'; color: var(--omen-cyan); font-size: 1.8rem; text-align: center; margin-bottom: 15px; cursor: pointer; }
+.lista-interna { display: flex; flex-direction: column; gap: 10px; }
+
+/* Estilo de los equipos dentro de los grupos */
+.lista-interna .card-equipo {
+    width: 100%;
+    min-width: 0;
+    height: 80px;
+    padding: 0 15px;
+    border-radius: 15px;
+}
+.lista-interna .equipo-logo { width: 40px; height: 40px; }
+
+.pelotitas-container { display: flex; gap: 5px; }
+.pelotita { width: 12px; height: 12px; border-radius: 50%; background: #111; border: 1px solid rgba(255,255,255,0.1); }
+.pelotita[data-estado="1"] { background: #00ff88; box-shadow: 0 0 8px #00ff88; }
+.pelotita[data-estado="2"] { background: var(--valorant-red); box-shadow: 0 0 8px var(--valorant-red); }
+.card-equipo.eliminado { opacity: 0.25; filter: grayscale(1); }
+
+/* --- MODAL --- */
+.team-modal { position: fixed; inset: 0; background: rgba(0,0,0,.85); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 1000; }
 .team-modal.active { display: flex; }
-.team-modal-card {
-    background: #0a0a1a; border: 2px solid var(--omen-purple); padding: 50px;
-    border-radius: 30px; width: 95%; max-width: 850px; box-shadow: 0 0 50px rgba(124, 114, 255, 0.3);
+.team-modal-card { background: #0a0a1a; border: 2px solid var(--omen-purple); padding: 30px; border-radius: 25px; width: 95%; max-width: 750px; }
+
+.fila-partido { display: flex; align-items: center; background: rgba(255,255,255,0.03); margin: 8px 0; padding: 10px; border-radius: 12px; gap: 10px; font-size: 0.85rem; }
+.logo-partido { width: 30px; height: 30px; object-fit: contain; }
+.fila-partido input { width: 45px; height: 35px; background: #000; color: #fff; border: 1px solid var(--omen-purple); text-align: center; border-radius: 5px; }
+
+@media (max-width: 1200px) {
+    .grid-equipos.fase-grupos { grid-template-columns: repeat(2, 1fr); }
 }
-
-.modal-equipo-content { display: flex; align-items: center; gap: 40px; width: 100%; }
-.modal-logo { width: 150px; height: 150px; object-fit: contain; flex-shrink: 0; }
-.modal-data { display: flex; flex-direction: column; flex: 1; text-align: left; }
-.modal-nombre { font-family: 'BertholdBlock'; font-size: 3.5rem; color: #fff; margin-bottom: 15px; }
-.modal-jugadores { font-size: 1.3rem; color: var(--omen-cyan); line-height: 1.6; }
-
-/* Estilo para los logos en la fila de partidos */
-.logo-partido { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
-.fila-partido input { width: 50px; height: 40px; background: #000; color: white; border: 1px solid var(--omen-purple); text-align: center; font-family: 'BertholdBlock'; font-size: 1.2rem; }
+/* Añade esto a tu archivo CSS */
+.sticker-monkey.btn-sonido:active {
+    transform: scale(0.8) rotate(5deg);
+    transition: 0.1s;
+}
