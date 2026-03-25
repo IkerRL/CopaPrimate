@@ -4,7 +4,7 @@ const audio = document.getElementById("audioMono");
 // Lógica del Sonido de los Monos
 document.querySelectorAll('.btn-sonido').forEach(mono => {
     mono.addEventListener('click', () => {
-        audio.currentTime = 0; // Reinicia el sonido si se pulsa varias veces rápido
+        audio.currentTime = 0; 
         audio.play();
     });
 });
@@ -53,7 +53,7 @@ equipos.forEach(eq => {
 const modal = document.getElementById("teamModal");
 const modalCard = document.getElementById("teamModalCard");
 
-// Zoom Doble Click
+// Zoom Doble Click (Solo antes del sorteo)
 document.addEventListener("dblclick", (e) => {
     const card = e.target.closest(".card-equipo");
     if (!card || document.body.classList.contains('sorteo-realizado')) return;
@@ -98,12 +98,15 @@ document.querySelector('.btn-valorant').addEventListener('click', function() {
         grupoWrapper.innerHTML = `<h2 class="titulo-grupo-header">GRUPO ${letra}</h2><div class="lista-interna"></div>`;
         const listaInterna = grupoWrapper.querySelector('.lista-interna');
 
+        // Inicializar memoria: 6 partidos para grupos de 4, 3 partidos para grupo D
         memoriaResultados[letra] = Array(letra === "D" ? 3 : 6).fill(null).map(() => ({ sL: "", sV: "" }));
 
         cardsGrupo.forEach(card => {
             card.classList.add('revealed');
             const nombre = card.querySelector('.nombre-equipo').textContent;
             const logo = card.querySelector('.equipo-logo').src;
+            
+            // Reiniciamos HTML de la card para la fase de grupos
             card.innerHTML = `
                 <div class="equipo-content" style="opacity:1">
                     <img src="${logo}" class="equipo-logo">
@@ -120,14 +123,17 @@ document.querySelector('.btn-valorant').addEventListener('click', function() {
 
         grupoWrapper.querySelector('.titulo-grupo-header').onclick = () => abrirGestionPartidos(letra, cardsGrupo, listaInterna);
         container.appendChild(grupoWrapper);
-        actualizarPuntosYOrden(listaInterna, letra);
+        actualizarPuntosYOrden(listaInterna, letra, false); // Orden inicial
     });
     this.parentElement.style.display = 'none';
 });
 
 // GESTIÓN DE PARTIDOS
 function abrirGestionPartidos(letra, cardsGrupo, listaInterna) {
-    const datos = cardsGrupo.map(c => ({ nombre: c.querySelector('.nombre-equipo').textContent, logo: c.querySelector('.equipo-logo').src }));
+    const datos = cardsGrupo.map(c => ({ 
+        nombre: c.querySelector('.nombre-equipo').textContent, 
+        logo: c.querySelector('.equipo-logo').src 
+    }));
     const cruces = (letra === "D") ? [[0,1], [1,2], [0,2]] : [[0,1], [2,3], [0,2], [1,3], [0,3], [1,2]];
     const resG = memoriaResultados[letra];
 
@@ -138,9 +144,9 @@ function abrirGestionPartidos(letra, cardsGrupo, listaInterna) {
                 <div class="fila-partido">
                     <img src="${datos[par[0]].logo}" class="logo-partido">
                     <span style="flex:1; text-align:right">${datos[par[0]].nombre}</span>
-                    <input type="number" class="in-l" value="${resG[i].sL}">
+                    <input type="number" class="in-l" value="${resG[i].sL}" placeholder="0">
                     <span>-</span>
-                    <input type="number" class="in-v" value="${resG[i].sV}">
+                    <input type="number" class="in-v" value="${resG[i].sV}" placeholder="0">
                     <span style="flex:1; text-align:left">${datos[par[1]].nombre}</span>
                     <img src="${datos[par[1]].logo}" class="logo-partido">
                 </div>
@@ -153,7 +159,10 @@ function abrirGestionPartidos(letra, cardsGrupo, listaInterna) {
         inp.oninput = () => {
             const filas = Array.from(modalCard.querySelectorAll('.fila-partido'));
             filas.forEach((f, idx) => {
-                memoriaResultados[letra][idx] = { sL: f.querySelector('.in-l').value, sV: f.querySelector('.in-v').value };
+                memoriaResultados[letra][idx] = { 
+                    sL: f.querySelector('.in-l').value, 
+                    sV: f.querySelector('.in-v').value 
+                };
             });
             procesarResultados(letra, cardsGrupo, listaInterna);
         };
@@ -165,41 +174,80 @@ function abrirGestionPartidos(letra, cardsGrupo, listaInterna) {
 function procesarResultados(letra, cardsGrupo, listaInterna) {
     const cruces = (letra === "D") ? [[0,1], [1,2], [0,2]] : [[0,1], [2,3], [0,2], [1,3], [0,3], [1,2]];
     const resultados = memoriaResultados[letra];
-    const conteo = Array(cardsGrupo.length).fill(0);
+    const conteoPelotitas = Array(cardsGrupo.length).fill(0);
+    
+    // Resetear stats temporales para el cálculo
+    const statsEquipos = cardsGrupo.map(c => ({ wins: 0, diff: 0, element: c }));
     cardsGrupo.forEach(c => c.querySelectorAll('.pelotita').forEach(p => p.dataset.estado = "0"));
+
+    let partidosCompletados = 0;
 
     cruces.forEach((par, i) => {
         const r = resultados[i];
         if(r.sL !== "" && r.sV !== "") {
+            partidosCompletados++;
             const vL = parseInt(r.sL), vV = parseInt(r.sV);
-            const pL = cardsGrupo[par[0]].querySelectorAll('.pelotita')[conteo[par[0]]];
-            const pV = cardsGrupo[par[1]].querySelectorAll('.pelotita')[conteo[par[1]]];
+            
+            const pL = cardsGrupo[par[0]].querySelectorAll('.pelotita')[conteoPelotitas[par[0]]];
+            const pV = cardsGrupo[par[1]].querySelectorAll('.pelotita')[conteoPelotitas[par[1]]];
+            
             if(pL && pV) {
-                if(vL > vV) { pL.dataset.estado = "1"; pV.dataset.estado = "2"; }
-                else if(vV > vL) { pL.dataset.estado = "2"; pV.dataset.estado = "1"; }
-                conteo[par[0]]++; conteo[par[1]]++;
+                if(vL > vV) { 
+                    pL.dataset.estado = "1"; pV.dataset.estado = "2"; 
+                    statsEquipos[par[0]].wins++;
+                } else if(vV > vL) { 
+                    pL.dataset.estado = "2"; pV.dataset.estado = "1"; 
+                    statsEquipos[par[1]].wins++;
+                }
+                conteoPelotitas[par[0]]++; 
+                conteoPelotitas[par[1]]++;
             }
+            // Diferencia de rondas (Puntos a favor - Puntos en contra)
+            statsEquipos[par[0]].diff += (vL - vV);
+            statsEquipos[par[1]].diff += (vV - vL);
         }
     });
-    actualizarPuntosYOrden(listaInterna, letra);
+
+    // Inyectar resultados en el dataset para el ordenamiento
+    statsEquipos.forEach(s => {
+        s.element.dataset.puntos = s.wins;
+        s.element.dataset.diferencia = s.diff;
+    });
+
+    // Solo activamos el gris si se han jugado todos los partidos del grupo
+    const grupoTerminado = (partidosCompletados === cruces.length);
+    actualizarPuntosYOrden(listaInterna, letra, grupoTerminado);
 }
 
-function actualizarPuntosYOrden(lista, letra) {
+function actualizarPuntosYOrden(lista, letra, grupoTerminado) {
     const cards = Array.from(lista.querySelectorAll('.card-equipo'));
-    cards.forEach(c => {
-        let pts = 0;
-        c.querySelectorAll('.pelotita').forEach(p => { if(p.dataset.estado === "1") pts++; });
-        c.dataset.puntos = pts;
+    
+    // Algoritmo de desempate: 1. Victorias, 2. Diferencia de Rondas
+    cards.sort((a, b) => {
+        const ptsA = parseInt(a.dataset.puntos) || 0;
+        const ptsB = parseInt(b.dataset.puntos) || 0;
+        if (ptsA !== ptsB) return ptsB - ptsA;
+
+        const diffA = parseInt(a.dataset.diferencia) || 0;
+        const diffB = parseInt(b.dataset.diferencia) || 0;
+        return diffB - diffA;
     });
-    cards.sort((a, b) => b.dataset.puntos - a.dataset.puntos);
+
     cards.forEach((c, idx) => {
         lista.appendChild(c);
-        if (letra === "D") {
-            if(idx === 2) c.classList.add('eliminado');
-            else c.classList.remove('eliminado');
-        } else {
-            if(idx >= 2) c.classList.add('eliminado');
-            else c.classList.remove('eliminado');
+        
+        // Quitar gris por defecto (por si se borra un resultado)
+        c.classList.remove('eliminado');
+
+        // Solo aplicar efecto de eliminación si el grupo está 100% jugado
+        if (grupoTerminado) {
+            if (letra === "D") {
+                // En el grupo de 3, pasan 2, el último (idx 2) muere
+                if(idx === 2) c.classList.add('eliminado');
+            } else {
+                // En grupos de 4, pasan 2, mueren los índices 2 y 3
+                if(idx >= 2) c.classList.add('eliminado');
+            }
         }
     });
 }
