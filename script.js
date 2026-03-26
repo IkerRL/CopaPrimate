@@ -14,7 +14,7 @@ const equipos = [
   { nombre: "Golden Sex", jugadores: ["Max", "Broken"], logo: "logo2.png" },
   { nombre: "Al-dedillo VC", jugadores: ["Xolo", "Noavae"], logo: "logo3.png" },
   { nombre: "Los Akrtona2", jugadores: ["S3R4X", "MasterKira"], logo: "logo4.png" },
-  { nombre: "Crimson Eclipsed", jugadores: ["ReyFhantom", "zNyrex "], logo: "logo5.png" },
+  { nombre: "Crimson Eclipse", jugadores: ["ReyFhantom", "zNyrex "], logo: "logo5.png" },
   { nombre: "Makaco NinjaPelocho", jugadores: ["Iker", "Adri"], logo: "logo6.png" },
   { nombre: "Bloody Fruit", jugadores: ["MrPain 神", "Sandiass21"], logo: "logo7.png" },
   { nombre: "Hijas del Kaos", jugadores: ["Satha", "Kaos"], logo: "logo8.png" },
@@ -27,9 +27,17 @@ const equipos = [
   { nombre: "Miaus", jugadores: ["Kae", "Wilson"], logo: "logo15.png" }
 ];
 
+// ESTRUCTURA DE GRUPOS OFICIALES (Manual)
+const gruposOficiales = {
+    "A": ["Rose Devil", "Hijas del Kaos", "Al-dedillo VC", "Bloody Fruit"],
+    "B": ["GOATS", "Los Akrtona2", "Crimson Eclipse", "Miaus"],
+    "C": ["SPIDYBOOBS", "MUGIWARAS", "TETONES: Equipo Nacional de Somalia", "Golden Sex"],
+    "D": ["Konoha Makaca", "Makaco NinjaPelocho", "Team Obrikat"]
+};
+
 const memoriaResultados = { "A": [], "B": [], "C": [], "D": [] };
 
-// Generar Cards Iniciales
+// Generar Cards Iniciales (Vista General)
 equipos.forEach(eq => {
     const card = document.createElement("div");
     card.className = "card-equipo";
@@ -53,7 +61,7 @@ equipos.forEach(eq => {
 const modal = document.getElementById("teamModal");
 const modalCard = document.getElementById("teamModalCard");
 
-// Zoom Doble Click (Solo antes del sorteo)
+// Zoom Doble Click
 document.addEventListener("dblclick", (e) => {
     const card = e.target.closest(".card-equipo");
     if (!card || document.body.classList.contains('sorteo-realizado')) return;
@@ -76,41 +84,36 @@ document.addEventListener("dblclick", (e) => {
 
 modal.addEventListener("click", (e) => { if(e.target === modal) modal.classList.remove("active"); });
 
-// BOTÓN SORTEO
+// BOTÓN GRUPOS
 document.querySelector('.btn-valorant').addEventListener('click', function() {
     document.body.classList.add('sorteo-realizado');
     container.classList.add('fase-grupos'); 
-    
-    const cards = Array.from(document.querySelectorAll('.card-equipo'));
-    const mezcladas = cards.sort(() => Math.random() - 0.5);
     container.innerHTML = '';
     
     const letras = ["A", "B", "C", "D"];
-    let indexActual = 0;
 
     letras.forEach(letra => {
-        const numEq = (letra === "D") ? 3 : 4;
-        const cardsGrupo = mezcladas.slice(indexActual, indexActual + numEq);
-        indexActual += numEq;
-
+        const nombresEnGrupo = gruposOficiales[letra];
         const grupoWrapper = document.createElement('div');
         grupoWrapper.className = 'contenedor-grupo';
         grupoWrapper.innerHTML = `<h2 class="titulo-grupo-header">GRUPO ${letra}</h2><div class="lista-interna"></div>`;
         const listaInterna = grupoWrapper.querySelector('.lista-interna');
 
-        // Inicializar memoria: 6 partidos para grupos de 4, 3 partidos para grupo D
+        // Inicializar memoria
         memoriaResultados[letra] = Array(letra === "D" ? 3 : 6).fill(null).map(() => ({ sL: "", sV: "" }));
 
-        cardsGrupo.forEach(card => {
-            card.classList.add('revealed');
-            const nombre = card.querySelector('.nombre-equipo').textContent;
-            const logo = card.querySelector('.equipo-logo').src;
-            
-            // Reiniciamos HTML de la card para la fase de grupos
+        const cardsGrupo = [];
+
+        nombresEnGrupo.forEach(nombreBusqueda => {
+            const eq = equipos.find(e => e.nombre === nombreBusqueda);
+            if(!eq) return;
+
+            const card = document.createElement("div");
+            card.className = "card-equipo revealed"; // Ya revelados en grupos
             card.innerHTML = `
                 <div class="equipo-content" style="opacity:1">
-                    <img src="${logo}" class="equipo-logo">
-                    <div style="flex:1"><div class="nombre-equipo">${nombre}</div></div>
+                    <img src="${eq.logo}" class="equipo-logo">
+                    <div style="flex:1"><div class="nombre-equipo">${eq.nombre}</div></div>
                     <div class="pelotitas-container">
                         <div class="pelotita" data-estado="0"></div>
                         <div class="pelotita" data-estado="0"></div>
@@ -119,11 +122,12 @@ document.querySelector('.btn-valorant').addEventListener('click', function() {
                 </div>
             `;
             listaInterna.appendChild(card);
+            cardsGrupo.push(card);
         });
 
         grupoWrapper.querySelector('.titulo-grupo-header').onclick = () => abrirGestionPartidos(letra, cardsGrupo, listaInterna);
         container.appendChild(grupoWrapper);
-        actualizarPuntosYOrden(listaInterna, letra, false); // Orden inicial
+        actualizarPuntosYOrden(listaInterna, letra, false);
     });
     this.parentElement.style.display = 'none';
 });
@@ -175,9 +179,8 @@ function procesarResultados(letra, cardsGrupo, listaInterna) {
     const cruces = (letra === "D") ? [[0,1], [1,2], [0,2]] : [[0,1], [2,3], [0,2], [1,3], [0,3], [1,2]];
     const resultados = memoriaResultados[letra];
     const conteoPelotitas = Array(cardsGrupo.length).fill(0);
-    
-    // Resetear stats temporales para el cálculo
     const statsEquipos = cardsGrupo.map(c => ({ wins: 0, diff: 0, element: c }));
+    
     cardsGrupo.forEach(c => c.querySelectorAll('.pelotita').forEach(p => p.dataset.estado = "0"));
 
     let partidosCompletados = 0;
@@ -187,7 +190,6 @@ function procesarResultados(letra, cardsGrupo, listaInterna) {
         if(r.sL !== "" && r.sV !== "") {
             partidosCompletados++;
             const vL = parseInt(r.sL), vV = parseInt(r.sV);
-            
             const pL = cardsGrupo[par[0]].querySelectorAll('.pelotita')[conteoPelotitas[par[0]]];
             const pV = cardsGrupo[par[1]].querySelectorAll('.pelotita')[conteoPelotitas[par[1]]];
             
@@ -202,19 +204,16 @@ function procesarResultados(letra, cardsGrupo, listaInterna) {
                 conteoPelotitas[par[0]]++; 
                 conteoPelotitas[par[1]]++;
             }
-            // Diferencia de rondas (Puntos a favor - Puntos en contra)
             statsEquipos[par[0]].diff += (vL - vV);
             statsEquipos[par[1]].diff += (vV - vL);
         }
     });
 
-    // Inyectar resultados en el dataset para el ordenamiento
     statsEquipos.forEach(s => {
         s.element.dataset.puntos = s.wins;
         s.element.dataset.diferencia = s.diff;
     });
 
-    // Solo activamos el gris si se han jugado todos los partidos del grupo
     const grupoTerminado = (partidosCompletados === cruces.length);
     actualizarPuntosYOrden(listaInterna, letra, grupoTerminado);
 }
@@ -222,7 +221,6 @@ function procesarResultados(letra, cardsGrupo, listaInterna) {
 function actualizarPuntosYOrden(lista, letra, grupoTerminado) {
     const cards = Array.from(lista.querySelectorAll('.card-equipo'));
     
-    // Algoritmo de desempate: 1. Victorias, 2. Diferencia de Rondas
     cards.sort((a, b) => {
         const ptsA = parseInt(a.dataset.puntos) || 0;
         const ptsB = parseInt(b.dataset.puntos) || 0;
@@ -235,17 +233,11 @@ function actualizarPuntosYOrden(lista, letra, grupoTerminado) {
 
     cards.forEach((c, idx) => {
         lista.appendChild(c);
-        
-        // Quitar gris por defecto (por si se borra un resultado)
         c.classList.remove('eliminado');
-
-        // Solo aplicar efecto de eliminación si el grupo está 100% jugado
         if (grupoTerminado) {
             if (letra === "D") {
-                // En el grupo de 3, pasan 2, el último (idx 2) muere
                 if(idx === 2) c.classList.add('eliminado');
             } else {
-                // En grupos de 4, pasan 2, mueren los índices 2 y 3
                 if(idx >= 2) c.classList.add('eliminado');
             }
         }
