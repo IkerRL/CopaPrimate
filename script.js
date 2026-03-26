@@ -27,7 +27,7 @@ const equipos = [
   { nombre: "Miaus", jugadores: ["Kae", "Wilson"], logo: "logo15.png" }
 ];
 
-// ESTRUCTURA DE GRUPOS OFICIALES (Manual)
+// ESTRUCTURA DE GRUPOS OFICIALES (Manuaal)
 const gruposOficiales = {
     "A": ["Rose Devil", "Hijas del Kaos", "Al-dedillo VC", "Bloody Fruit"],
     "B": ["GOATS", "Los Akrtona2", "Crimson Eclipse", "Miaus"],
