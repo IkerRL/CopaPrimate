@@ -52,7 +52,14 @@ const memoriaResultados = {
         { sL: "1", sV: "5" }, // GOATS vs Miaus
         { sL: "5", sV: "0" }  // Los Akrtona2 vs Crimson Eclipse
     ],
-    "C": Array(6).fill(null).map(() => ({ sL: "", sV: "" })), 
+"C": [
+        { sL: "5", sV: "1" }, // SPIDYBOOBS vs MUGIWARAS
+        { sL: "5", sV: "0" }, // TETONES vs Golden Sex
+        { sL: "3", sV: "5" }, // SPIDYBOOBS vs TETONES
+        { sL: "1", sV: "5" }, // MUGIWARAS vs Golden Sex
+        { sL: "2", sV: "5" }, // SPIDYBOOBS vs Golden Sex
+        { sL: "4", sV: "5" }  // MUGIWARAS vs TETONES
+    ],
     "D": Array(3).fill(null).map(() => ({ sL: "", sV: "" })) 
 };
 
