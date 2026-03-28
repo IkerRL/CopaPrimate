@@ -44,7 +44,14 @@ const memoriaResultados = {
         { sL: "5", sV: "0" }, // Rose Devil vs Bloody Fruit
         { sL: "5", sV: "2" }  // Hijas del Kaos vs Al-dedillo VC
     ], 
-    "B": Array(6).fill(null).map(() => ({ sL: "", sV: "" })), 
+"B": [
+        { sL: "1", sV: "5" }, // GOATS vs Los Akrtona2
+        { sL: "0", sV: "5" }, // Crimson Eclipse vs Miaus
+        { sL: "5", sV: "0" }, // GOATS vs Crimson Eclipse
+        { sL: "2", sV: "5" }, // Los Akrtona2 vs Miaus
+        { sL: "1", sV: "5" }, // GOATS vs Miaus
+        { sL: "5", sV: "0" }  // Los Akrtona2 vs Crimson Eclipse
+    ],
     "C": Array(6).fill(null).map(() => ({ sL: "", sV: "" })), 
     "D": Array(3).fill(null).map(() => ({ sL: "", sV: "" })) 
 };
