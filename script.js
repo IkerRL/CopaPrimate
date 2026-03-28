@@ -27,7 +27,6 @@ const equipos = [
   { nombre: "Miaus", jugadores: ["Kae", "Wilson"], logo: "logo15.png" }
 ];
 
-// ESTRUCTURA DE GRUPOS OFICIALES (Manuaal)
 const gruposOficiales = {
     "A": ["Rose Devil", "Hijas del Kaos", "Al-dedillo VC", "Bloody Fruit"],
     "B": ["GOATS", "Los Akrtona2", "Crimson Eclipse", "Miaus"],
@@ -35,9 +34,22 @@ const gruposOficiales = {
     "D": ["Konoha Makaca", "Makaco NinjaPelocho", "Team Obrikat"]
 };
 
-const memoriaResultados = { "A": [], "B": [], "C": [], "D": [] };
+// RESULTADOS GRUPO A INTEGRADOS
+const memoriaResultados = { 
+    "A": [
+        { sL: "4", sV: "5" }, // Rose Devil vs Hijas del Kaos
+        { sL: "5", sV: "0" }, // Al-dedillo VC vs Bloody Fruit
+        { sL: "5", sV: "3" }, // Rose Devil vs Al-dedillo VC
+        { sL: "5", sV: "0" }, // Hijas del Kaos vs Bloody Fruit
+        { sL: "5", sV: "0" }, // Rose Devil vs Bloody Fruit
+        { sL: "5", sV: "2" }  // Hijas del Kaos vs Al-dedillo VC
+    ], 
+    "B": Array(6).fill(null).map(() => ({ sL: "", sV: "" })), 
+    "C": Array(6).fill(null).map(() => ({ sL: "", sV: "" })), 
+    "D": Array(3).fill(null).map(() => ({ sL: "", sV: "" })) 
+};
 
-// Generar Cards Iniciales (Vista General)
+// Generar Cards Iniciales
 equipos.forEach(eq => {
     const card = document.createElement("div");
     card.className = "card-equipo";
@@ -90,26 +102,20 @@ document.querySelector('.btn-valorant').addEventListener('click', function() {
     container.classList.add('fase-grupos'); 
     container.innerHTML = '';
     
-    const letras = ["A", "B", "C", "D"];
-
-    letras.forEach(letra => {
+    ["A", "B", "C", "D"].forEach(letra => {
         const nombresEnGrupo = gruposOficiales[letra];
         const grupoWrapper = document.createElement('div');
         grupoWrapper.className = 'contenedor-grupo';
         grupoWrapper.innerHTML = `<h2 class="titulo-grupo-header">GRUPO ${letra}</h2><div class="lista-interna"></div>`;
         const listaInterna = grupoWrapper.querySelector('.lista-interna');
 
-        // Inicializar memoria
-        memoriaResultados[letra] = Array(letra === "D" ? 3 : 6).fill(null).map(() => ({ sL: "", sV: "" }));
-
         const cardsGrupo = [];
-
         nombresEnGrupo.forEach(nombreBusqueda => {
             const eq = equipos.find(e => e.nombre === nombreBusqueda);
             if(!eq) return;
 
             const card = document.createElement("div");
-            card.className = "card-equipo revealed"; // Ya revelados en grupos
+            card.className = "card-equipo revealed";
             card.innerHTML = `
                 <div class="equipo-content" style="opacity:1">
                     <img src="${eq.logo}" class="equipo-logo">
@@ -127,12 +133,13 @@ document.querySelector('.btn-valorant').addEventListener('click', function() {
 
         grupoWrapper.querySelector('.titulo-grupo-header').onclick = () => abrirGestionPartidos(letra, cardsGrupo, listaInterna);
         container.appendChild(grupoWrapper);
-        actualizarPuntosYOrden(listaInterna, letra, false);
+        
+        // Auto-procesar si ya hay datos (como en el Grupo A)
+        procesarResultados(letra, cardsGrupo, listaInterna);
     });
     this.parentElement.style.display = 'none';
 });
 
-// GESTIÓN DE PARTIDOS
 function abrirGestionPartidos(letra, cardsGrupo, listaInterna) {
     const datos = cardsGrupo.map(c => ({ 
         nombre: c.querySelector('.nombre-equipo').textContent, 
@@ -200,6 +207,9 @@ function procesarResultados(letra, cardsGrupo, listaInterna) {
                 } else if(vV > vL) { 
                     pL.dataset.estado = "2"; pV.dataset.estado = "1"; 
                     statsEquipos[par[1]].wins++;
+                } else {
+                    // Empate (opcional)
+                    pL.dataset.estado = "0"; pV.dataset.estado = "0";
                 }
                 conteoPelotitas[par[0]]++; 
                 conteoPelotitas[par[1]]++;
