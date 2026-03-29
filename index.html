@@ -31,15 +31,18 @@
     <section class="grid-equipos" id="container-equipos"></section>
     
     <footer class="footer-controls">
-        <button class="btn-valorant">
+        <button class="btn-valorant" id="btn-fase-grupos">
             <span class="btn-content">GRUPOS</span>
+        </button>
+
+        <button class="btn-valorant" id="btn-playoffs" style="display: none; margin-left: 20px;">
+            <span class="btn-content">FASE FINAL</span>
         </button>
     </footer>
 </main>
 
 <div class="team-modal" id="teamModal">
-    <div class="team-modal-card" id="teamModalCard">
-        </div>
+    <div class="team-modal-card" id="teamModalCard"></div>
 </div>
 
 <audio id="audioMono" src="sonido.mp3"></audio>
