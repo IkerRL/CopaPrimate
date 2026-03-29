@@ -71,10 +71,9 @@ body {
     margin: 0 auto;
 }
 
-/* ESTADO: CUANDO HAY GRUPOS (Todos en una fila) */
 .grid-equipos.fase-grupos {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Esto fuerza A, B, C, D en línea */
+    grid-template-columns: repeat(4, 1fr);
     align-items: start;
 }
 
@@ -128,12 +127,11 @@ body {
     border-radius: 25px; 
     padding: 20px; 
     border: 1px solid rgba(124, 114, 255, 0.15);
-    width: 100%; /* Se adapta al grid de 4 columnas */
+    width: 100%;
 }
 .titulo-grupo-header { font-family: 'BertholdBlock'; color: var(--omen-cyan); font-size: 1.8rem; text-align: center; margin-bottom: 15px; cursor: pointer; }
 .lista-interna { display: flex; flex-direction: column; gap: 10px; }
 
-/* Estilo de los equipos dentro de los grupos */
 .lista-interna .card-equipo {
     width: 100%;
     min-width: 0;
@@ -161,24 +159,24 @@ body {
 @media (max-width: 1200px) {
     .grid-equipos.fase-grupos { grid-template-columns: repeat(2, 1fr); }
 }
-/* Añade esto a tu archivo CSS */
+
 .sticker-monkey.btn-sonido:active {
     transform: scale(0.8) rotate(5deg);
     transition: 0.1s;
 }
-/* --- NUEVA SECCIÓN BRACKETS (PIRÁMIDE LIMPIA Y PERFECTA) --- */
+
+/* --- SECCIÓN BRACKETS: TODOS TAMAÑO FINAL --- */
 .bracket-container {
     display: flex;
     justify-content: center;
-    gap: 60px; /* Distancia exacta de las líneas horizontales */
-    padding: 40px;
+    gap: 70px; /* Un poco más de gap por el tamaño de las cajas */
+    padding: 60px 20px;
     width: 100%;
-    min-height: 70vh;
 }
 
 .bracket-column {
-    width: 240px;
-    height: 480px;
+    width: 270px; /* Más ancho para las cajas grandes */
+    height: 700px; 
     position: relative;
 }
 
@@ -186,12 +184,12 @@ body {
     background: rgba(15, 15, 30, 0.9);
     border: 1px solid var(--omen-purple);
     border-left: 5px solid var(--omen-cyan);
-    padding: 8px 12px;
-    width: 240px;
-    height: 90px;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    position: absolute; /* Clave para el centrado absoluto */
+    padding: 10px 15px;
+    width: 270px;   /* Tamaño basado en el scale(1.1) anterior */
+    height: 125px;  /* Altura unificada para todos (Final style) */
+    border-radius: 10px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+    position: absolute;
     left: 0;
     box-sizing: border-box;
     display: flex;
@@ -206,103 +204,67 @@ body {
     gap: 12px;
 }
 
-.match-team-row img { width: 30px; height: 30px; object-fit: contain; }
+.match-team-row img { width: 34px; height: 34px; object-fit: contain; }
 .match-team-row span { 
     font-family: 'BertholdBlock'; 
-    font-size: 0.9rem; 
-    color: #eee; 
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
+    font-size: 0.95rem; 
+    color: #fff;
 }
 
-.vs-line { height: 1px; background: rgba(124, 114, 255, 0.2); margin: 6px 0; }
+.vs-line { height: 1px; background: rgba(124, 114, 255, 0.2); margin: 8px 0; }
 
-/* ==========================================
-   POSICIONES "Y" (ALTURAS) EXACTAS SIN TÍTULOS
-   ========================================== */
+/* POSICIONES Y RECALCULADAS PARA CAJAS DE 125PX */
 
-/* Columna 1: Cuartos */
+/* Columna 1 */
 .bracket-column:nth-child(1) .match-box:nth-child(1) { top: 0px; }
-.bracket-column:nth-child(1) .match-box:nth-child(2) { top: 130px; }
-.bracket-column:nth-child(1) .match-box:nth-child(3) { top: 260px; }
-.bracket-column:nth-child(1) .match-box:nth-child(4) { top: 390px; }
+.bracket-column:nth-child(1) .match-box:nth-child(2) { top: 180px; }
+.bracket-column:nth-child(1) .match-box:nth-child(3) { top: 360px; }
+.bracket-column:nth-child(1) .match-box:nth-child(4) { top: 540px; }
 
-/* Columna 2: Semis */
-.bracket-column:nth-child(2) .match-box:nth-child(1) { top: 65px; }
-.bracket-column:nth-child(2) .match-box:nth-child(2) { top: 325px; }
+/* Columna 2 */
+.bracket-column:nth-child(2) .match-box:nth-child(1) { top: 90px; }
+.bracket-column:nth-child(2) .match-box:nth-child(2) { top: 450px; }
 
-/* Columna 3: Final */
-.bracket-column:nth-child(3) .match-box:nth-child(1) { top: 195px; transform: scale(1.1); }
+/* Columna 3 (Final) */
+.bracket-column:nth-child(3) .match-box:nth-child(1) { top: 270px; }
 
-/* ==========================================
-   LÍNEAS PERFECTAS CON BORDES
-   ========================================== */
+/* LÍNEAS CONECTORAS UNIFICADAS */
 
-/* LÍNEAS SALIENTES (CUARTOS -> SEMIS) */
-/* Cajas de arriba bajan 65px */
+/* Cuartos -> Semis (Distancia 90px) */
 .bracket-column:nth-child(1) .match-box:nth-child(1)::after,
 .bracket-column:nth-child(1) .match-box:nth-child(3)::after {
-    content: ''; position: absolute;
-    right: -30px; top: 50%;
-    width: 30px; height: 65px;
-    border-top: 2px solid var(--omen-purple);
-    border-right: 2px solid var(--omen-purple);
-    box-sizing: border-box;
-    border-top-right-radius: 4px;
-    z-index: 1;
+    content: ''; position: absolute; right: -35px; top: 50%;
+    width: 35px; height: 92px;
+    border-top: 2px solid var(--omen-purple); border-right: 2px solid var(--omen-purple);
+    border-top-right-radius: 6px;
 }
 
-/* Cajas de abajo suben 65px */
 .bracket-column:nth-child(1) .match-box:nth-child(2)::after,
 .bracket-column:nth-child(1) .match-box:nth-child(4)::after {
-    content: ''; position: absolute;
-    right: -30px; bottom: 50%;
-    width: 30px; height: 65px;
-    border-bottom: 2px solid var(--omen-purple);
-    border-right: 2px solid var(--omen-purple);
-    box-sizing: border-box;
-    border-bottom-right-radius: 4px;
-    z-index: 1;
+    content: ''; position: absolute; right: -35px; bottom: 50%;
+    width: 35px; height: 92px;
+    border-bottom: 2px solid var(--omen-purple); border-right: 2px solid var(--omen-purple);
+    border-bottom-right-radius: 6px;
 }
 
-/* LÍNEAS SALIENTES (SEMIS -> FINAL) */
-/* Semi 1 baja 130px */
+/* Semis -> Final (Distancia 180px) */
 .bracket-column:nth-child(2) .match-box:nth-child(1)::after {
-    content: ''; position: absolute;
-    right: -30px; top: 50%;
-    width: 30px; height: 130px; 
-    border-top: 2px solid var(--omen-purple);
-    border-right: 2px solid var(--omen-purple);
-    box-sizing: border-box;
-    border-top-right-radius: 4px;
-    z-index: 1;
+    content: ''; position: absolute; right: -35px; top: 50%;
+    width: 35px; height: 182px;
+    border-top: 2px solid var(--omen-purple); border-right: 2px solid var(--omen-purple);
+    border-top-right-radius: 6px;
 }
 
-/* Semi 2 sube 130px */
 .bracket-column:nth-child(2) .match-box:nth-child(2)::after {
-    content: ''; position: absolute;
-    right: -30px; bottom: 50%;
-    width: 30px; height: 130px;
-    border-bottom: 2px solid var(--omen-purple);
-    border-right: 2px solid var(--omen-purple);
-    box-sizing: border-box;
-    border-bottom-right-radius: 4px;
-    z-index: 1;
+    content: ''; position: absolute; right: -35px; bottom: 50%;
+    width: 35px; height: 182px;
+    border-bottom: 2px solid var(--omen-purple); border-right: 2px solid var(--omen-purple);
+    border-bottom-right-radius: 6px;
 }
 
-/* LÍNEAS ENTRANTES HORIZONTALES (SEMIS Y FINAL) */
-.bracket-column:nth-child(2) .match-box::before {
-    content: ''; position: absolute;
-    left: -30px; top: 50%;
-    width: 30px; height: 2px;
-    background: var(--omen-purple);
-}
-
+/* Entradas Horizontales */
+.bracket-column:nth-child(2) .match-box::before,
 .bracket-column:nth-child(3) .match-box::before {
-    content: ''; position: absolute;
-    left: -32px; /* Ajuste milimétrico por el scale() de la final */
-    top: 50%;
-    width: 30px; height: 2px;
-    background: var(--omen-purple);
+    content: ''; position: absolute; left: -35px; top: 50%;
+    width: 35px; height: 2px; background: var(--omen-purple);
 }
