@@ -110,8 +110,14 @@ document.addEventListener("dblclick", (e) => {
 
 modal.addEventListener("click", (e) => { if(e.target === modal) modal.classList.remove("active"); });
 
-// BOTÓN GRUPOS
-document.querySelector('.btn-valorant').addEventListener('click', function() {
+// ==========================================
+// NUEVA LÓGICA DE BOTONES Y FASE FINAL
+// ==========================================
+
+const btnGruposOriginal = document.getElementById('btn-fase-grupos');
+const btnPlayoffs = document.getElementById('btn-playoffs');
+
+btnGruposOriginal.addEventListener('click', function() {
     document.body.classList.add('sorteo-realizado');
     container.classList.add('fase-grupos'); 
     container.innerHTML = '';
@@ -148,11 +154,222 @@ document.querySelector('.btn-valorant').addEventListener('click', function() {
         grupoWrapper.querySelector('.titulo-grupo-header').onclick = () => abrirGestionPartidos(letra, cardsGrupo, listaInterna);
         container.appendChild(grupoWrapper);
         
-        // Auto-procesar si ya hay datos (como en el Grupo A)
+        // Auto-procesar si ya hay datos (como en el Grupo A, B y C)
         procesarResultados(letra, cardsGrupo, listaInterna);
     });
-    this.parentElement.style.display = 'none';
+
+    // En lugar de ocultar todo el footer, escondemos este botón y mostramos el de playoffs
+    this.style.display = 'none';
+    btnPlayoffs.style.display = 'inline-block';
 });
+
+// Evento para el botón de Fase Final (Generar Bracket)
+btnPlayoffs.addEventListener('click', () => {
+    const clasificados = {};
+    const grupos = ["A", "B", "C", "D"];
+
+    // 1. Extraer los 2 mejores de cada grupo basándonos en el orden actual en pantalla
+    grupos.forEach(letra => {
+        const contenedores = Array.from(document.querySelectorAll('.contenedor-grupo'));
+        const con = contenedores.find(c => c.querySelector('.titulo-grupo-header').textContent.includes(letra));
+        const cards = Array.from(con.querySelectorAll('.card-equipo'));
+        
+        clasificados[letra] = [
+            { nombre: cards[0].querySelector('.nombre-equipo').textContent, logo: cards[0].querySelector('.equipo-logo').src },
+            { nombre: cards[1].querySelector('.nombre-equipo').textContent, logo: cards[1].querySelector('.equipo-logo').src }
+        ];
+    });
+
+    // 2. Definir cruces cruzados para que los del mismo grupo NO se toquen hasta la final
+    const crucesFinales = [
+        { t1: clasificados["A"][0], t2: clasificados["C"][1] }, // 1º A vs 2º C
+        { t1: clasificados["B"][0], t2: clasificados["D"][1] }, // 1º B vs 2º D
+        { t1: clasificados["C"][0], t2: clasificados["A"][1] }, // 1º C vs 2º A
+        { t1: clasificados["D"][0], t2: clasificados["B"][1] }  // 1º D vs 2º B
+    ];
+
+    generarBracketUI(crucesFinales);
+});
+function generarBracketUI(cruces) {
+    container.innerHTML = ''; 
+    container.classList.remove('fase-grupos');
+    btnPlayoffs.style.display = 'none'; 
+    
+    const bracketHTML = `
+        <div style="width:100%">
+            <div class="bracket-container">
+                
+                <div class="bracket-column" id="col-cuartos">
+                    ${cruces.map((c, i) => `
+                        <div class="match-box" data-partido="${i}" style="cursor:pointer;">
+                            <div class="match-team-row" data-equipo="1">
+                                <img src="${c.t1.logo}"><span>${c.t1.nombre}</span>
+                            </div>
+                            <div class="vs-line"></div>
+                            <div class="match-team-row" data-equipo="2">
+                                <img src="${c.t2.logo}"><span>${c.t2.nombre}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="bracket-column" id="col-semis">
+                    <div class="match-box" data-partido="0" style="cursor:pointer;">
+                        <div class="match-team-row" data-equipo="1"><span>TBD</span></div>
+                        <div class="vs-line"></div>
+                        <div class="match-team-row" data-equipo="2"><span>TBD</span></div>
+                    </div>
+                    <div class="match-box" data-partido="1" style="cursor:pointer;">
+                        <div class="match-team-row" data-equipo="1"><span>TBD</span></div>
+                        <div class="vs-line"></div>
+                        <div class="match-team-row" data-equipo="2"><span>TBD</span></div>
+                    </div>
+                </div>
+
+                <div class="bracket-column" id="col-final">
+                    <div class="match-box" data-partido="0" style="border-left-color: gold; box-shadow: 0 0 30px rgba(255,215,0,0.15); cursor:pointer; height: 140px;">
+                        
+                        <div class="match-team-row" data-equipo="1"><span>TBD</span></div>
+                        <div class="pelotitas-container" id="pelotitas-final-1" style="margin-bottom: 10px; justify-content: flex-start;">
+                            <div class="pelotita" data-estado="0"></div>
+                            <div class="pelotita" data-estado="0"></div>
+                            <div class="pelotita" data-estado="0"></div>
+                        </div>
+
+                        <div class="vs-line"></div>
+
+                        <div class="match-team-row" data-equipo="2" style="margin-top: 10px;"><span>TBD</span></div>
+                        <div class="pelotitas-container" id="pelotitas-final-2" style="justify-content: flex-start;">
+                            <div class="pelotita" data-estado="0"></div>
+                            <div class="pelotita" data-estado="0"></div>
+                            <div class="pelotita" data-estado="0"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = bracketHTML;
+
+    // --- EVENTO DE DOBLE CLIC ---
+    const boxes = container.querySelectorAll('.match-box');
+    boxes.forEach(box => {
+        box.addEventListener('dblclick', function() {
+            const eq1 = this.querySelector('[data-equipo="1"]').innerHTML;
+            const eq2 = this.querySelector('[data-equipo="2"]').innerHTML;
+            const partidoIdx = this.dataset.partido;
+            const columna = this.parentElement.id;
+
+            if(eq1.includes('TBD') || eq2.includes('TBD')) return;
+
+            // CASO ESPECIAL: Doble clic en la Gran Final
+            if (columna === "col-final") {
+                modalCard.innerHTML = `
+                    <div style="width:100%">
+                        <h2 style="font-family:'BertholdBlock'; text-align:center; color:gold; margin-bottom:15px">MARCADOR DE LA FINAL</h2>
+                        <div class="fila-partido">
+                            <div style="flex:1; display:flex; align-items:center; gap:10px; justify-content:flex-end;">${eq1}</div>
+                            <input type="number" id="final-res1" class="in-l" placeholder="0" style="width:60px; text-align:center;">
+                            <span>-</span>
+                            <input type="number" id="final-res2" class="in-v" placeholder="0" style="width:60px; text-align:center;">
+                            <div style="flex:1; display:flex; align-items:center; gap:10px; justify-content:flex-start;">${eq2}</div>
+                        </div>
+                        <button class="btn-valorant" id="guardar-final" style="width:100%; margin-top:15px">
+                            <span class="btn-content">REGISTRAR MAPA</span>
+                        </button>
+                    </div>
+                `;
+                modal.classList.add("active");
+
+                document.getElementById('guardar-final').onclick = () => {
+                    const r1 = parseInt(document.getElementById('final-res1').value) || 0;
+                    const r2 = parseInt(document.getElementById('final-res2').value) || 0;
+
+                    const pelotitas1 = document.querySelectorAll('#pelotitas-final-1 .pelotita');
+                    const pelotitas2 = document.querySelectorAll('#pelotitas-final-2 .pelotita');
+
+                    // Contamos cuántas victorias ya tenían
+                    let victorias1 = 0;
+                    let victorias2 = 0;
+                    pelotitas1.forEach(p => { if(p.dataset.estado === "1") victorias1++; });
+                    pelotitas2.forEach(p => { if(p.dataset.estado === "1") victorias2++; });
+
+                    if (r1 > r2) {
+                        if(victorias1 < 3) {
+                            pelotitas1[victorias1].dataset.estado = "1";
+                            victorias1++;
+                        }
+                    } else if (r2 > r1) {
+                        if(victorias2 < 3) {
+                            pelotitas2[victorias2].dataset.estado = "1";
+                            victorias2++;
+                        }
+                    } else {
+                        alert("En la final no hay empates. Pon el marcador de este mapa.");
+                        return;
+                    }
+
+                    modal.classList.remove("active");
+
+                    // Comprobamos si alguno ha llegado a 3 victorias
+                    if (victorias1 === 3) {
+                        alert(`🏆 ¡TORNEO FINALIZADO! El campeón absoluto es el equipo de arriba.`);
+                    } else if (victorias2 === 3) {
+                        alert(`🏆 ¡TORNEO FINALIZADO! El campeón absoluto es el equipo de abajo.`);
+                    }
+                };
+                return; // Fin lógica de la final
+            }
+
+            // CASO NORMAL: Cuartos y Semis
+            modalCard.innerHTML = `
+                <div style="width:100%">
+                    <h2 style="font-family:'BertholdBlock'; text-align:center; color:var(--omen-cyan); margin-bottom:15px">RESULTADO DEL PARTIDO</h2>
+                    <div class="fila-partido">
+                        <div style="flex:1; display:flex; align-items:center; gap:10px; justify-content:flex-end;">${eq1}</div>
+                        <input type="number" id="res-eq1" class="in-l" placeholder="0" style="width:60px; text-align:center;">
+                        <span>-</span>
+                        <input type="number" id="res-eq2" class="in-v" placeholder="0" style="width:60px; text-align:center;">
+                        <div style="flex:1; display:flex; align-items:center; gap:10px; justify-content:flex-start;">${eq2}</div>
+                    </div>
+                    <button class="btn-valorant" id="guardar-bracket" style="width:100%; margin-top:15px">
+                        <span class="btn-content">CONFIRMAR GANADOR</span>
+                    </button>
+                </div>
+            `;
+            modal.classList.add("active");
+
+            document.getElementById('guardar-bracket').onclick = () => {
+                const r1 = parseInt(document.getElementById('res-eq1').value);
+                const r2 = parseInt(document.getElementById('res-eq2').value);
+
+                if (isNaN(r1) || isNaN(r2)) { alert("Pon los goles/puntos."); return; }
+
+                let ganadorHTML = (r1 > r2) ? eq1 : (r2 > r1) ? eq2 : null;
+                if (!ganadorHTML) { alert("¡Debe haber un ganador!"); return; }
+
+                if (columna === "col-cuartos") {
+                    const boxSemisIdx = Math.floor(partidoIdx / 2);
+                    const slotEquipo = (partidoIdx % 2 === 0) ? "1" : "2";
+                    const targetBox = document.querySelector(`#col-semis .match-box[data-partido="${boxSemisIdx}"]`);
+                    targetBox.querySelector(`[data-equipo="${slotEquipo}"]`).innerHTML = ganadorHTML;
+                } else if (columna === "col-semis") {
+                    const slotEquipo = (partidoIdx == 0) ? "1" : "2";
+                    const targetBox = document.querySelector(`#col-final .match-box[data-partido="0"]`);
+                    targetBox.querySelector(`[data-equipo="${slotEquipo}"]`).innerHTML = ganadorHTML;
+                }
+                modal.classList.remove("active");
+            };
+        });
+    });
+}
+
+
+// ==========================================
+// FUNCIONES DE PROCESAMIENTO ORIGINALES
+// ==========================================
 
 function abrirGestionPartidos(letra, cardsGrupo, listaInterna) {
     const datos = cardsGrupo.map(c => ({ 
@@ -222,7 +439,6 @@ function procesarResultados(letra, cardsGrupo, listaInterna) {
                     pL.dataset.estado = "2"; pV.dataset.estado = "1"; 
                     statsEquipos[par[1]].wins++;
                 } else {
-                    // Empate (opcional)
                     pL.dataset.estado = "0"; pV.dataset.estado = "0";
                 }
                 conteoPelotitas[par[0]]++; 
