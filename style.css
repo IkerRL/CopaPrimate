@@ -166,3 +166,143 @@ body {
     transform: scale(0.8) rotate(5deg);
     transition: 0.1s;
 }
+/* --- NUEVA SECCIÓN BRACKETS (PIRÁMIDE LIMPIA Y PERFECTA) --- */
+.bracket-container {
+    display: flex;
+    justify-content: center;
+    gap: 60px; /* Distancia exacta de las líneas horizontales */
+    padding: 40px;
+    width: 100%;
+    min-height: 70vh;
+}
+
+.bracket-column {
+    width: 240px;
+    height: 480px;
+    position: relative;
+}
+
+.match-box {
+    background: rgba(15, 15, 30, 0.9);
+    border: 1px solid var(--omen-purple);
+    border-left: 5px solid var(--omen-cyan);
+    padding: 8px 12px;
+    width: 240px;
+    height: 90px;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    position: absolute; /* Clave para el centrado absoluto */
+    left: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 2;
+}
+
+.match-team-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.match-team-row img { width: 30px; height: 30px; object-fit: contain; }
+.match-team-row span { 
+    font-family: 'BertholdBlock'; 
+    font-size: 0.9rem; 
+    color: #eee; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+}
+
+.vs-line { height: 1px; background: rgba(124, 114, 255, 0.2); margin: 6px 0; }
+
+/* ==========================================
+   POSICIONES "Y" (ALTURAS) EXACTAS SIN TÍTULOS
+   ========================================== */
+
+/* Columna 1: Cuartos */
+.bracket-column:nth-child(1) .match-box:nth-child(1) { top: 0px; }
+.bracket-column:nth-child(1) .match-box:nth-child(2) { top: 130px; }
+.bracket-column:nth-child(1) .match-box:nth-child(3) { top: 260px; }
+.bracket-column:nth-child(1) .match-box:nth-child(4) { top: 390px; }
+
+/* Columna 2: Semis */
+.bracket-column:nth-child(2) .match-box:nth-child(1) { top: 65px; }
+.bracket-column:nth-child(2) .match-box:nth-child(2) { top: 325px; }
+
+/* Columna 3: Final */
+.bracket-column:nth-child(3) .match-box:nth-child(1) { top: 195px; transform: scale(1.1); }
+
+/* ==========================================
+   LÍNEAS PERFECTAS CON BORDES
+   ========================================== */
+
+/* LÍNEAS SALIENTES (CUARTOS -> SEMIS) */
+/* Cajas de arriba bajan 65px */
+.bracket-column:nth-child(1) .match-box:nth-child(1)::after,
+.bracket-column:nth-child(1) .match-box:nth-child(3)::after {
+    content: ''; position: absolute;
+    right: -30px; top: 50%;
+    width: 30px; height: 65px;
+    border-top: 2px solid var(--omen-purple);
+    border-right: 2px solid var(--omen-purple);
+    box-sizing: border-box;
+    border-top-right-radius: 4px;
+    z-index: 1;
+}
+
+/* Cajas de abajo suben 65px */
+.bracket-column:nth-child(1) .match-box:nth-child(2)::after,
+.bracket-column:nth-child(1) .match-box:nth-child(4)::after {
+    content: ''; position: absolute;
+    right: -30px; bottom: 50%;
+    width: 30px; height: 65px;
+    border-bottom: 2px solid var(--omen-purple);
+    border-right: 2px solid var(--omen-purple);
+    box-sizing: border-box;
+    border-bottom-right-radius: 4px;
+    z-index: 1;
+}
+
+/* LÍNEAS SALIENTES (SEMIS -> FINAL) */
+/* Semi 1 baja 130px */
+.bracket-column:nth-child(2) .match-box:nth-child(1)::after {
+    content: ''; position: absolute;
+    right: -30px; top: 50%;
+    width: 30px; height: 130px; 
+    border-top: 2px solid var(--omen-purple);
+    border-right: 2px solid var(--omen-purple);
+    box-sizing: border-box;
+    border-top-right-radius: 4px;
+    z-index: 1;
+}
+
+/* Semi 2 sube 130px */
+.bracket-column:nth-child(2) .match-box:nth-child(2)::after {
+    content: ''; position: absolute;
+    right: -30px; bottom: 50%;
+    width: 30px; height: 130px;
+    border-bottom: 2px solid var(--omen-purple);
+    border-right: 2px solid var(--omen-purple);
+    box-sizing: border-box;
+    border-bottom-right-radius: 4px;
+    z-index: 1;
+}
+
+/* LÍNEAS ENTRANTES HORIZONTALES (SEMIS Y FINAL) */
+.bracket-column:nth-child(2) .match-box::before {
+    content: ''; position: absolute;
+    left: -30px; top: 50%;
+    width: 30px; height: 2px;
+    background: var(--omen-purple);
+}
+
+.bracket-column:nth-child(3) .match-box::before {
+    content: ''; position: absolute;
+    left: -32px; /* Ajuste milimétrico por el scale() de la final */
+    top: 50%;
+    width: 30px; height: 2px;
+    background: var(--omen-purple);
+}
