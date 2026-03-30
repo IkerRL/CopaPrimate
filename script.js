@@ -60,7 +60,11 @@ const memoriaResultados = {
         { sL: "2", sV: "5" }, // SPIDYBOOBS vs Golden Sex
         { sL: "4", sV: "5" }  // MUGIWARAS vs TETONES
     ],
-    "D": Array(3).fill(null).map(() => ({ sL: "", sV: "" })) 
+"D": [
+        { sL: "0", sV: "5" }, // Konoha Makaca vs Makaco NinjaPelocho
+        { sL: "2", sV: "5" }, // Makaco NinjaPelocho vs Team Obrikat
+        { sL: "1", sV: "5" }  // Konoha Makaca vs Team Obrikat
+    ]
 };
 
 // Generar Cards Iniciales
