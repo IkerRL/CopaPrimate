@@ -49,7 +49,7 @@ equipos.forEach(eq => {
     container.appendChild(card);
 });
 
-// Zoom Original (Logo + Nombre + Jugadores) solo al inicio
+// Zoom Original
 document.addEventListener("dblclick", (e) => {
     const card = e.target.closest(".card-equipo");
     if (!card || document.body.classList.contains('sorteo-realizado')) return;
@@ -108,10 +108,38 @@ btnPlayoffs.onclick = () => {
 function generarBracketUI(cruces) {
     container.innerHTML = ''; container.classList.remove('fase-grupos'); btnPlayoffs.style.display = 'none';
     const p = (n) => `<div class="pelotitas-container">${Array(n).fill('<div class="pelotita" data-estado="0"></div>').join('')}</div>`;
+    
+    // El "top" está calculado para que las líneas del CSS encajen (184px de separación en Cuartos)
     container.innerHTML = `<div class="bracket-container">
-        <div class="bracket-column" id="col-cuartos">${cruces.map((c, i) => `<div class="match-box" data-partido="${i}" data-wins="2"><div class="match-team-row" data-eq="1"><img src="${c.t1.logo}"><span>${c.t1.nombre}</span></div>${p(2)}<div class="vs-line"></div><div class="match-team-row" data-eq="2"><img src="${c.t2.logo}"><span>${c.t2.nombre}</span></div>${p(2)}</div>`).join('')}</div>
-        <div class="bracket-column" id="col-semis">${[0,1].map(i => `<div class="match-box" data-partido="${i}" data-wins="2"><div class="match-team-row" data-eq="1"><span>TBD</span></div>${p(2)}<div class="vs-line"></div><div class="match-team-row" data-eq="2"><span>TBD</span></div>${p(2)}</div>`).join('')}</div>
-        <div class="bracket-column" id="col-final"><div class="match-box" data-partido="0" data-wins="3" style="border-left-color: gold;"><div class="match-team-row" data-eq="1"><span>TBD</span></div>${p(3)}<div class="vs-line"></div><div class="match-team-row" data-eq="2"><span>TBD</span></div>${p(3)}</div></div>
+        <div class="bracket-column" id="col-cuartos">
+            ${cruces.map((c, i) => `
+                <div class="match-box" style="top: ${i * 184}px" data-partido="${i}" data-wins="2">
+                    <div class="match-team-row" data-eq="1"><img src="${c.t1.logo}"><span>${c.t1.nombre}</span></div>
+                    ${p(2)}
+                    <div class="vs-line"></div>
+                    <div class="match-team-row" data-eq="2"><img src="${c.t2.logo}"><span>${c.t2.nombre}</span></div>
+                    ${p(2)}
+                </div>`).join('')}
+        </div>
+        <div class="bracket-column" id="col-semis">
+            ${[0,1].map(i => `
+                <div class="match-box" style="top: ${i * 368 + 92}px" data-partido="${i}" data-wins="2">
+                    <div class="match-team-row" data-eq="1"><span>TBD</span></div>
+                    ${p(2)}
+                    <div class="vs-line"></div>
+                    <div class="match-team-row" data-eq="2"><span>TBD</span></div>
+                    ${p(2)}
+                </div>`).join('')}
+        </div>
+        <div class="bracket-column" id="col-final">
+            <div class="match-box" style="top: 276px; border-left-color: gold;" data-partido="0" data-wins="3">
+                <div class="match-team-row" data-eq="1"><span>TBD</span></div>
+                ${p(3)}
+                <div class="vs-line"></div>
+                <div class="match-team-row" data-eq="2"><span>TBD</span></div>
+                ${p(3)}
+            </div>
+        </div>
     </div>`;
 
     document.querySelectorAll('.match-box').forEach(box => {
@@ -119,36 +147,52 @@ function generarBracketUI(cruces) {
             const r1 = this.querySelector('[data-eq="1"]'); const r2 = this.querySelector('[data-eq="2"]');
             if(r1.innerText === 'TBD' || r2.innerText === 'TBD') return;
             
-            // ZOOM SOLO LOGOS (ELIMINATORIA)
+            const img1 = r1.querySelector('img') ? r1.querySelector('img').src : '';
+            const img2 = r2.querySelector('img') ? r2.querySelector('img').src : '';
+
             modalCard.innerHTML = `
                 <h2 style="font-family:'BertholdBlock'; text-align:center; color:var(--omen-cyan); margin-bottom:10px">RESULTADO MAPA</h2>
                 <div class="fila-partido">
-                    <img src="${r1.querySelector('img').src}" style="width:140px; height:140px; object-fit:contain">
+                    <img src="${img1}" style="width:140px; height:140px; object-fit:contain">
                     <input type="number" id="sc1" class="input-score">
                     <span style="font-size:3rem; font-family:'BertholdBlock'">-</span>
                     <input type="number" id="sc2" class="input-score">
-                    <img src="${r2.querySelector('img').src}" style="width:140px; height:140px; object-fit:contain">
+                    <img src="${img2}" style="width:140px; height:140px; object-fit:contain">
                 </div>
                 <button class="btn-valorant" id="saveM" style="width:100%"><span class="btn-content">CONFIRMAR</span></button>
             `;
             modal.classList.add("active");
 
             document.getElementById('saveM').onclick = () => {
+                const limit = parseInt(this.dataset.wins);
+                const p1 = this.querySelectorAll('.pelotitas-container')[0].querySelectorAll('.pelotita');
+                const p2 = this.querySelectorAll('.pelotitas-container')[1].querySelectorAll('.pelotita');
+                
+                let v1 = Array.from(p1).filter(p => p.dataset.estado === "1").length;
+                let v2 = Array.from(p2).filter(p => p.dataset.estado === "1").length;
+
+                // Si ya hay un ganador, no permitir sumar más
+                if(v1 >= limit || v2 >= limit) {
+                    modal.classList.remove("active");
+                    return;
+                }
+
                 const s1 = parseInt(document.getElementById('sc1').value) || 0;
                 const s2 = parseInt(document.getElementById('sc2').value) || 0;
                 if(s1 === s2) return;
-                const p1 = this.querySelectorAll('.pelotitas-container')[0].querySelectorAll('.pelotita');
-                const p2 = this.querySelectorAll('.pelotitas-container')[1].querySelectorAll('.pelotita');
-                let v1 = Array.from(p1).filter(p => p.dataset.estado === "1").length;
-                let v2 = Array.from(p2).filter(p => p.dataset.estado === "1").length;
-                if(s1 > s2 && v1 < p1.length) p1[v1].dataset.estado = "1", v1++;
-                else if(s2 > s1 && v2 < p2.length) p2[v2].dataset.estado = "1", v2++;
+
+                if(s1 > s2 && v1 < p1.length) { p1[v1].dataset.estado = "1"; v1++; }
+                else if(s2 > s1 && v2 < p2.length) { p2[v2].dataset.estado = "1"; v2++; }
+
                 modal.classList.remove("active");
-                const limit = parseInt(this.dataset.wins);
+
                 if(v1 === limit || v2 === limit) {
                     const winH = (v1 === limit) ? r1.innerHTML : r2.innerHTML;
                     const loserRow = (v1 === limit) ? r2 : r1;
-                    loserRow.parentElement.classList.add('team-perdedor');
+                    
+                    // Solo el equipo perdedor se vuelve gris
+                    loserRow.classList.add('team-perdedor');
+                    
                     const col = this.parentElement.id; const idx = parseInt(this.dataset.partido);
                     if(col === "col-cuartos") {
                         const target = document.querySelector(`#col-semis .match-box[data-partido="${Math.floor(idx/2)}"]`);
