@@ -261,14 +261,17 @@ function mostrarCampeon(nombre, logo) {
         <h1 class="champion-title">¡CAMPEÓN VOL. I!</h1>
         <img src="${logo}" class="champion-logo">
         <h2 class="champion-name">${nombre}</h2>
-        <button class="btn-valorant" onclick="this.parentElement.remove()" style="margin-top: 50px;">
-            <span class="btn-content">CERRAR</span>
+        <button class="btn-valorant" onclick="location.reload()" style="margin-top: 50px;">
+            <span class="btn-content">FINALIZAR TORNEO</span>
         </button>
     `;
     document.body.appendChild(overlay);
 
-    audio.currentTime = 0; 
-    audio.play();
+    // Suena la canción Champions
+    if(audioChampions) {
+        audioChampions.currentTime = 0;
+        audioChampions.play();
+    }
 
     setTimeout(() => { overlay.classList.add('active'); }, 100);
 }
