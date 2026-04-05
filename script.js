@@ -3,11 +3,7 @@ const audio = document.getElementById("audioMono");
 const modal = document.getElementById("teamModal");
 const modalCard = document.getElementById("teamModalCard");
 
-// Sonido Original
-document.querySelectorAll('.btn-sonido').forEach(mono => {
-    mono.addEventListener('click', () => { audio.currentTime = 0; audio.play(); });
-});
-
+// --- 1. DATOS Y MEMORIA ---
 const equipos = [
   { nombre: "Rose Devil", jugadores: ["Tony", "Jokker"], logo: "logo1.png" },
   { nombre: "Golden Sex", jugadores: ["Max", "Broken"], logo: "logo2.png" },
@@ -21,9 +17,9 @@ const equipos = [
   { nombre: "Team Obrikat", jugadores: ["JettDiffs", "EGOFack"], logo: "logo10.png" },
   { nombre: "TETONES: Equipo Nacional de Somalia", jugadores: ["Marrkitosss", "Davv"], logo: "logo11.png" },
   { nombre: "GOATS", jugadores: ["Mica", "Marco"], logo: "logo12.png" },
-  { nombre: "SPIDYBOOBS", jugadores: ["Sama", "Potro"], logo: "logo13.png" },
-  { nombre: "MUGIWARAS", jugadores: ["Andreloregon", "Jess"], logo: "logo14.png" },
-  { nombre: "Miaus", jugadores: ["Kae", "Wilson"], logo: "logo15.png" }
+  { nombre: "SPIDYBOOBS", jugadores: ["Sama", "Potro"], logo: "logo14.png" },
+  { nombre: "MUGIWARAS", jugadores: ["Andreloregon", "Jess"], logo: "logo15.png" },
+  { nombre: "Miaus", jugadores: ["Kae", "Wilson"], logo: "logo13.png" }
 ];
 
 const gruposOficiales = {
@@ -40,7 +36,25 @@ const memoriaResultados = {
     "D": [{sL: "0", sV: "5"}, {sL: "2", sV: "5"}, {sL: "1", sV: "5"}]
 };
 
-// Generación inicial
+// NUEVA MEMORIA DE PLAYOFFS
+const memoriaPlayoffs = {
+    cuartos: [
+        { v1: 0, v2: 2 }, // Hijas del Kaos vs Golden Sex -> PASA GOLDEN
+        { v1: 0, v2: 2 }, // Miaus vs Makaco NinjaPelocho -> PASA MAKACO
+        { v1: 2, v2: 0 }, // TETONES vs Rose Devil -> PASA TETONES
+        { v1: 0, v2: 2 }  // Team Obrikat vs Los Akrtona2 -> PASA AKRTONA2
+    ],
+    semis: [
+        { v1: 2, v2: 1 }, // Golden Sex vs Makaco -> PASA GOLDEN
+        { v1: 2, v2: 1 }  // TETONES vs Akrtona2 -> PASA TETONES
+    ]
+};
+
+// --- 2. INICIALIZACIÓN Y SONIDOS ---
+document.querySelectorAll('.btn-sonido').forEach(mono => {
+    mono.addEventListener('click', () => { audio.currentTime = 0; audio.play(); });
+});
+
 equipos.forEach(eq => {
     const card = document.createElement("div");
     card.className = "card-equipo";
@@ -49,7 +63,7 @@ equipos.forEach(eq => {
     container.appendChild(card);
 });
 
-// Zoom Original
+// Zoom Modal
 document.addEventListener("dblclick", (e) => {
     const card = e.target.closest(".card-equipo");
     if (!card || document.body.classList.contains('sorteo-realizado')) return;
@@ -61,6 +75,7 @@ document.addEventListener("dblclick", (e) => {
 });
 modal.addEventListener("click", (e) => { if(e.target === modal) modal.classList.remove("active"); });
 
+// --- 3. BOTONES PRINCIPALES ---
 const btnGruposOriginal = document.getElementById('btn-fase-grupos');
 const btnPlayoffs = document.getElementById('btn-playoffs');
 
@@ -90,26 +105,25 @@ btnGruposOriginal.onclick = function() {
 };
 
 btnPlayoffs.onclick = () => {
-    const clasificados = {};
-    document.querySelectorAll('.contenedor-grupo').forEach((con, idx) => {
-        const letra = ["A","B","C","D"][idx];
-        const cards = Array.from(con.querySelectorAll('.card-equipo'));
-        clasificados[letra] = [
-            { nombre: cards[0].querySelector('.nombre-equipo').textContent, logo: cards[0].querySelector('.equipo-logo').src },
-            { nombre: cards[1].querySelector('.nombre-equipo').textContent, logo: cards[1].querySelector('.equipo-logo').src }
-        ];
-    });
-    generarBracketUI([
-        { t1: clasificados["A"][0], t2: clasificados["C"][1] }, { t1: clasificados["B"][0], t2: clasificados["D"][1] },
-        { t1: clasificados["C"][0], t2: clasificados["A"][1] }, { t1: clasificados["D"][0], t2: clasificados["B"][1] }
-    ]);
+    const buscar = (nom) => {
+        const e = equipos.find(eq => eq.nombre === nom);
+        return { nombre: e.nombre, logo: e.logo };
+    };
+    const crucesManuales = [
+        { t1: buscar("Hijas del Kaos"), t2: buscar("Golden Sex") },
+        { t1: buscar("Miaus"), t2: buscar("Makaco NinjaPelocho") },
+        { t1: buscar("TETONES: Equipo Nacional de Somalia"), t2: buscar("Rose Devil") },
+        { t1: buscar("Team Obrikat"), t2: buscar("Los Akrtona2") }
+    ];
+    generarBracketUI(crucesManuales);
 };
+
+// --- 4. FUNCIONES DE LÓGICA ---
 
 function generarBracketUI(cruces) {
     container.innerHTML = ''; container.classList.remove('fase-grupos'); btnPlayoffs.style.display = 'none';
     const p = (n) => `<div class="pelotitas-container">${Array(n).fill('<div class="pelotita" data-estado="0"></div>').join('')}</div>`;
     
-    // El "top" está calculado para que las líneas del CSS encajen (184px de separación en Cuartos)
     container.innerHTML = `<div class="bracket-container">
         <div class="bracket-column" id="col-cuartos">
             ${cruces.map((c, i) => `
@@ -142,11 +156,47 @@ function generarBracketUI(cruces) {
         </div>
     </div>`;
 
+    function aplicarYAvance(box, v1, v2) {
+        const limit = parseInt(box.dataset.wins);
+        const p1 = box.querySelectorAll('.pelotitas-container')[0].querySelectorAll('.pelotita');
+        const p2 = box.querySelectorAll('.pelotitas-container')[1].querySelectorAll('.pelotita');
+        const r1 = box.querySelector('[data-eq="1"]');
+        const r2 = box.querySelector('[data-eq="2"]');
+
+        for(let i=0; i<v1; i++) if(p1[i]) p1[i].dataset.estado = "1";
+        for(let i=0; i<v2; i++) if(p2[i]) p2[i].dataset.estado = "1";
+
+        if(v1 === limit || v2 === limit) {
+            const winH = (v1 === limit) ? r1.innerHTML : r2.innerHTML;
+            if(v1 === limit) r2.classList.add('team-perdedor'); else r1.classList.add('team-perdedor');
+            
+            const col = box.parentElement.id; const idx = parseInt(box.dataset.partido);
+            if(col === "col-cuartos") {
+                const target = document.querySelector(`#col-semis .match-box[data-partido="${Math.floor(idx/2)}"]`);
+                target.querySelector(`[data-eq="${(idx%2===0)?'1':'2'}"]`).innerHTML = winH;
+            } else if (col === "col-semis") {
+                document.querySelector(`#col-final .match-box`).querySelector(`[data-eq="${(idx===0)?'1':'2'}"]`).innerHTML = winH;
+            }
+        }
+    }
+
+    // Procesar Cuartos
+    document.querySelectorAll('#col-cuartos .match-box').forEach((box, i) => {
+        aplicarYAvance(box, memoriaPlayoffs.cuartos[i].v1, memoriaPlayoffs.cuartos[i].v2);
+    });
+
+    // Procesar Semis
+    setTimeout(() => {
+        document.querySelectorAll('#col-semis .match-box').forEach((box, i) => {
+            aplicarYAvance(box, memoriaPlayoffs.semis[i].v1, memoriaPlayoffs.semis[i].v2);
+        });
+    }, 50);
+
+    // Eventos de click para la Final
     document.querySelectorAll('.match-box').forEach(box => {
         box.ondblclick = function() {
             const r1 = this.querySelector('[data-eq="1"]'); const r2 = this.querySelector('[data-eq="2"]');
             if(r1.innerText === 'TBD' || r2.innerText === 'TBD') return;
-            
             const img1 = r1.querySelector('img') ? r1.querySelector('img').src : '';
             const img2 = r2.querySelector('img') ? r2.querySelector('img').src : '';
 
@@ -167,16 +217,10 @@ function generarBracketUI(cruces) {
                 const limit = parseInt(this.dataset.wins);
                 const p1 = this.querySelectorAll('.pelotitas-container')[0].querySelectorAll('.pelotita');
                 const p2 = this.querySelectorAll('.pelotitas-container')[1].querySelectorAll('.pelotita');
-                
                 let v1 = Array.from(p1).filter(p => p.dataset.estado === "1").length;
                 let v2 = Array.from(p2).filter(p => p.dataset.estado === "1").length;
 
-                // Si ya hay un ganador, no permitir sumar más
-                if(v1 >= limit || v2 >= limit) {
-                    modal.classList.remove("active");
-                    return;
-                }
-
+                if(v1 >= limit || v2 >= limit) { modal.classList.remove("active"); return; }
                 const s1 = parseInt(document.getElementById('sc1').value) || 0;
                 const s2 = parseInt(document.getElementById('sc2').value) || 0;
                 if(s1 === s2) return;
@@ -185,25 +229,48 @@ function generarBracketUI(cruces) {
                 else if(s2 > s1 && v2 < p2.length) { p2[v2].dataset.estado = "1"; v2++; }
 
                 modal.classList.remove("active");
-
+                
                 if(v1 === limit || v2 === limit) {
                     const winH = (v1 === limit) ? r1.innerHTML : r2.innerHTML;
-                    const loserRow = (v1 === limit) ? r2 : r1;
-                    
-                    // Solo el equipo perdedor se vuelve gris
-                    loserRow.classList.add('team-perdedor');
+                    if(v1 === limit) r2.classList.add('team-perdedor'); else r1.classList.add('team-perdedor');
                     
                     const col = this.parentElement.id; const idx = parseInt(this.dataset.partido);
+                    
                     if(col === "col-cuartos") {
                         const target = document.querySelector(`#col-semis .match-box[data-partido="${Math.floor(idx/2)}"]`);
                         target.querySelector(`[data-eq="${(idx%2===0)?'1':'2'}"]`).innerHTML = winH;
                     } else if (col === "col-semis") {
                         document.querySelector(`#col-final .match-box`).querySelector(`[data-eq="${(idx===0)?'1':'2'}"]`).innerHTML = winH;
+                    } else if (col === "col-final") {
+                        // --- ¡TENEMOS CAMPEÓN DEL TORNEO! ---
+                        const winnerName = (v1 === limit) ? r1.querySelector('span').textContent : r2.querySelector('span').textContent;
+                        const winnerLogo = (v1 === limit) ? r1.querySelector('img').src : r2.querySelector('img').src;
+                        mostrarCampeon(winnerName, winnerLogo);
                     }
                 }
             };
         };
     });
+}
+
+// --- FUNCIÓN PARA LA PANTALLA DE VICTORIA ---
+function mostrarCampeon(nombre, logo) {
+    const overlay = document.createElement('div');
+    overlay.className = 'champion-overlay';
+    overlay.innerHTML = `
+        <h1 class="champion-title">¡CAMPEÓN VOL. I!</h1>
+        <img src="${logo}" class="champion-logo">
+        <h2 class="champion-name">${nombre}</h2>
+        <button class="btn-valorant" onclick="this.parentElement.remove()" style="margin-top: 50px;">
+            <span class="btn-content">CERRAR</span>
+        </button>
+    `;
+    document.body.appendChild(overlay);
+
+    audio.currentTime = 0; 
+    audio.play();
+
+    setTimeout(() => { overlay.classList.add('active'); }, 100);
 }
 
 function abrirGestionPartidos(letra, cardsGrupo, listaInterna) {
